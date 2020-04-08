@@ -9,7 +9,7 @@ namespace XNode.FSMG
 	public abstract class NodeBase_Action : Node, INodeNoodleLabel
 	{
 		public abstract void Execute(FSMBehaviour fsm);
-
+        
         public override object GetValue(NodePort port)
         {
             return this;

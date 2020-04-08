@@ -136,20 +136,20 @@ namespace XNodeEditor
             TextAnchor textAnchor = EditorStyles.helpBox.alignment;
             FontStyle fontStype = EditorStyles.helpBox.fontStyle;
 
-            GUI.backgroundColor = new Color(0, 0, 0, 255);
-            GUI.color = new Color(125, 125, 125, 255);            
+            //  GUI.backgroundColor = new Color(0, 0, 0, 255);
+            GUI.color = new Color(255, 255, 255, 255);
 
-            EditorStyles.helpBox.alignment = TextAnchor.MiddleCenter;          
-            EditorStyles.helpBox.fontStyle = FontStyle.BoldAndItalic;
+            //  EditorStyles.helpBox.alignment = TextAnchor.MiddleCenter;          
+            //  EditorStyles.helpBox.fontStyle = FontStyle.BoldAndItalic;
 
 
-            Handles.Label(labelPosition, content, EditorStyles.helpBox);
+            Handles.Label(labelPosition, content, EditorStyles.miniLabel);
 
-            EditorStyles.helpBox.fontStyle = fontStype;
-            EditorStyles.helpBox.alignment = textAnchor;
+            // EditorStyles.helpBox.fontStyle = fontStype;
+            // EditorStyles.helpBox.alignment = textAnchor;
 
             GUI.color = Color.white;
-            GUI.backgroundColor = Color.white;
+            //GUI.backgroundColor = Color.white;
 
         }
         private static bool AllowShowLabe(Node node)

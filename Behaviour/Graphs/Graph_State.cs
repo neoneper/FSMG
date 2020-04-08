@@ -55,20 +55,20 @@ namespace XNode.FSMG
         public void InitGraph(FSMBehaviour fsm)
         {
             currentState_elapsedTime = 0;
-            if (CurrentState == null)
+
+            if (RootState == null)
             {
-                if (RootState != null)
-                    _currentState = _rootState;
-                else
+                XNode.Node node = nodes.FirstOrDefault(r => r is NodeBase_State);
+                if (node != null)
                 {
-                    XNode.Node node = nodes.FirstOrDefault(r => r is NodeBase_State);
-                    if (node != null)
-                    {
-                        _rootState = (NodeBase_State)node;
-                        _currentState = _rootState;
-                    }
+                    _rootState = (NodeBase_State)node;
+                    _currentState = _rootState;
                 }
             }
+
+            if (RootState != null)
+                _currentState = RootState;
+
         }
 
         /// <summary>
@@ -133,7 +133,13 @@ namespace XNode.FSMG
             return result;
         }
 
-
+        public Graph_State Instance
+        {
+            get
+            {
+                return (Graph_State)this.Copy();
+            }
+        }
 
     }
 

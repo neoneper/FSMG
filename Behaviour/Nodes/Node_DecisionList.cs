@@ -49,10 +49,10 @@ namespace XNode.FSMG
             if (tmp.Count > 0)
             {
                 label = "";
-                foreach (AI_DecisionBase decision in aiDecisions)
+                foreach (AI_DecisionBase decision in tmp)
                 {
-                    if (decision != null)
-                        label += decision.name + "\n";
+                    label += decision.name + "\n";
+
                 }
             }
             tmp.Clear();
@@ -70,6 +70,16 @@ namespace XNode.FSMG
             else return INodeNoodleLabelActiveType.SelectedPair;
         }
 
+        private bool CheckReferenceIsValid(AI_DecisionBase aiDecision)
+        {
+            if (aiDecision == null)
+                return false;
+
+            if (aiDecision.Graph != graph && aiDecision.Graph != null)
+                return false;
+
+            return true;
+        }
 
     }
 }

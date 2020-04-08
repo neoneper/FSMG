@@ -15,7 +15,7 @@ namespace XNode.FSMG
         [Output]
         public NodeBase_Action outAction = null;
 
-        [SerializeField]
+        [SerializeField, NodeAIAction(true)]
         private AI_ActionBase action = null;
 
 

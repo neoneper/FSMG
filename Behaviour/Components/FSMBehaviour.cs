@@ -12,7 +12,11 @@ namespace XNode.FSMG.Components
     [RequireComponent(typeof(Rigidbody))]
     public abstract class FSMBehaviour : MonoBehaviour
     {
+        private bool isGraphInstantied = false;
+
         private NavMeshAgent _navMeshAgent = null;
+        private Rigidbody _rigidbody = null;
+
         private List<FSMTarget> _targets = null;
 
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
@@ -41,7 +45,22 @@ namespace XNode.FSMG.Components
             }
         }
 
-        public Graph_State graph { get { return _graph; } }
+        public Graph_State graph
+        {
+            get
+            {
+                if (Application.isPlaying && _graph != null && isGraphInstantied == false)
+                {
+                    _graph = _graph.Instance;
+                    isGraphInstantied = true;
+
+                }
+
+                return _graph;
+            }
+        }
+
+
         public NavMeshAgent navMeshAgent
         {
             get
@@ -55,6 +74,16 @@ namespace XNode.FSMG.Components
                 return _navMeshAgent;
 
 
+            }
+        }
+        public Rigidbody rigidBody
+        {
+            get
+            {
+                if (_rigidbody == null)
+                    _rigidbody = GetComponent<Rigidbody>();
+
+                return _rigidbody;
             }
         }
         public AIAgentStats agentStats { get { return _agentStats; } }

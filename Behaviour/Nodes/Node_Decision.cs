@@ -6,13 +6,13 @@ using XNode;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("States/Decisions/Decision"), NodeTint("#FFCD00")]
+    [CreateNodeMenu("States/Decisions/Decision"), NodeTint("#FFCD00"), NodeWidth(150)]
     public class Node_Decision : NodeBase_Decision
     {
         //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs
         private bool isAlreadyRename = false;
 
-        [SerializeField]
+        [SerializeField, NodeAIDececision(true)]
         private AI_DecisionBase aiDecision = null;
 
         [Output(typeConstraint = TypeConstraint.Strict)]
@@ -33,6 +33,8 @@ namespace XNode.FSMG
 
         public override bool Execute(FSMBehaviour fsm)
         {
+            CheckReferenceIsValid();
+
             if (aiDecision == null)
                 return false;
 
@@ -56,11 +58,22 @@ namespace XNode.FSMG
         }
         public override INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            //Esonde a label caso nao haja nenhuma ação referenciada
+            CheckReferenceIsValid();
 
+            //Esonde a label caso nao haja nenhuma ação referenciada
             if (aiDecision == null)
                 return INodeNoodleLabelActiveType.Never;
-            else return INodeNoodleLabelActiveType.SelectedPair;
+
+            return INodeNoodleLabelActiveType.SelectedPair;
+        }
+
+        private void CheckReferenceIsValid()
+        {
+            if (aiDecision == null)
+                return;
+
+            if (aiDecision.Graph != graph && aiDecision.Graph != null)
+                aiDecision = null;
         }
 
     }
