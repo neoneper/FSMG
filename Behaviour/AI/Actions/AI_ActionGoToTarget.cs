@@ -13,6 +13,11 @@ public class AI_ActionGoToTarget : AI_ActionBase
 
     public override void Execute(FSMBehaviour fsm)
     {
+        DoExecute(fsm, targetName);
+    }
+
+    public static void DoExecute(FSMBehaviour fsm, string targetName)
+    {
         if (Application.isEditor && Application.isPlaying == false)
             return;
 
@@ -43,7 +48,6 @@ public class AI_ActionGoToTarget : AI_ActionBase
             }
         }
     }
-
 
 
 

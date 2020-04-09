@@ -15,6 +15,9 @@ public class AI_DecisionIsFinishPath : AI_DecisionBase
 
     private bool CheckDecision(FSMBehaviour fsm)
     {
+        if (Application.isEditor && Application.isPlaying == false)
+            return false;
+
         NavMeshAgent agent = fsm.navMeshAgent;
 
         if (agent.remainingDistance <= agent.stoppingDistance + fsm.agentStats.agent.pathEndThreshold)
