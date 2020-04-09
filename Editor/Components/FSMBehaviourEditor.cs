@@ -118,13 +118,12 @@ public class FSMBehaviourEditor : Editor
     }
     private void ClearNewVarProperties(bool openNewVarPanel = false)
     {
-        if (Event.current.type == EventType.Repaint)
-        {
-            show_defaultErrorPanel = false;
-            new_varErrorMsg = "";
-            new_varName = FSMGUtility.StringTag_Undefined;
-            new_varType = GraphVarType.Integer;
-            show_newVarPanel = openNewVarPanel;
-        }
+
+        show_defaultErrorPanel = false;
+        new_varErrorMsg = "";
+        new_varName = FSMGUtility.StringTag_Undefined;
+        new_varType = GraphVarType.Integer;
+        show_newVarPanel = openNewVarPanel;
+
     }
 }
