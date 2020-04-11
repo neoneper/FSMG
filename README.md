@@ -6,3 +6,6 @@ It allows the creation of global and local variables, as well as customized rout
 It is still in the testing phase.
 
 Fell free to use and to help improve.
+
+PS: To work with FSGM you need download XNODE Pack. 
+https://github.com/neoneper/xNode
