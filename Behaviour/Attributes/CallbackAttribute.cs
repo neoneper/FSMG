@@ -7,16 +7,14 @@ namespace XNode.FSMG
 {
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
-    public class NodeAIActionAttribute : PropertyAttribute
+    public class CallbackAttribute : PropertyAttribute
     {
-        private string callbackname;
-        private bool useNodeEnum;
-        public bool UseNodeEnum { get { return useNodeEnum; } }
+        private string callbackname;  
         public string CallbackName { get { return callbackname; } }
 
-        public NodeAIActionAttribute(bool nodeEnum = false, string callback="")
+        public CallbackAttribute( string callback="")
         {
-            useNodeEnum = nodeEnum;
+           
             callbackname = callback;
         }
     }

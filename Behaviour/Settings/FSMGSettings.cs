@@ -6,14 +6,13 @@ using UnityEditor;
 using UnityEngine;
 using XNode.FSMG;
 
-namespace XNodeEditor.FSMG
+namespace XNode.FSMG
 {
     public class FSMGSettings : ScriptableObject
-    {
-        public const string _customSettingsPath = "Assets/Editor/FSMGSettings/FSMGSettings.asset";
+    {      
 
         [SerializeField]
-        private TargetList targets = null;
+        private TargetListGlobal targets = null;
         [SerializeField]
         private IntVarList intVars = null;
         [SerializeField]
@@ -23,7 +22,7 @@ namespace XNodeEditor.FSMG
         [SerializeField]
         private BoolVarList boolVars = null;
 
-        public string[] Targets
+        public string[] TargetsName
         {
             get
             {
@@ -32,7 +31,7 @@ namespace XNodeEditor.FSMG
                 return result.ToArray();
             }
         }
-        public string[] Int_Variables
+        public string[] Int_VariablesName
         {
             get
             {
@@ -41,7 +40,7 @@ namespace XNodeEditor.FSMG
                 return result.ToArray();
             }
         }
-        public string[] Float_Variables
+        public string[] Float_VariablesName
         {
             get
             {
@@ -50,7 +49,7 @@ namespace XNodeEditor.FSMG
                 return result.ToArray();
             }
         }
-        public string[] Double_Variables
+        public string[] Double_VariablesName
         {
             get
             {
@@ -59,7 +58,7 @@ namespace XNodeEditor.FSMG
                 return result.ToArray();
             }
         }
-        public string[] Bool_Variables
+        public string[] Bool_VariablesName
         {
             get
             {
@@ -69,39 +68,21 @@ namespace XNodeEditor.FSMG
             }
         }
 
-        public static FSMGSettings GetOrCreateSettings()
+        public bool TryGetIntVar(string variable, out IntVar intVar)
         {
-            if (AssetDatabase.IsValidFolder("Assets/Editor") == false)
-                AssetDatabase.CreateFolder("Assets", "Editor");
-            if (AssetDatabase.IsValidFolder("Assets/Editor/FSMGSettings") == false)
-                AssetDatabase.CreateFolder("Assets/Editor", "FSMGSettings");
-
-
-            FSMGSettings[] allSettings = ScriptableObjectUtility.GetAllInstances<FSMGSettings>();
-            FSMGSettings settings = allSettings.ToList().FirstOrDefault();
-
-            if (settings == null)
-            {
-                settings = ScriptableObject.CreateInstance<FSMGSettings>();
-
-                AssetDatabase.CreateAsset(settings, _customSettingsPath);
-                AssetDatabase.SaveAssets();
-            }
-            return settings;
+            return intVars.TryGetValue(variable, out intVar);
         }
-        public static SerializedObject GetSerializedSettings()
+        public bool TryGetFloatVar(string variable, out FloatVar floatVar)
         {
-            return new SerializedObject(GetOrCreateSettings());
+            return floatVars.TryGetValue(variable, out floatVar);
         }
-
-
-
-        [MenuItem("FSMG/Globals")]
-        public static void OpenSeetingsWindows()
+        public bool TryGetDoubeVar(string variable, out DoubleVar doubleVar)
         {
-
-            SettingsService.OpenProjectSettings("Project/FSMGraph Globals");
-
+            return doubleVars.TryGetValue(variable, out doubleVar);
+        }
+        public bool TryGetBoolVar(string variable, out BoolVar boolVar)
+        {
+            return boolVars.TryGetValue(variable, out boolVar);
         }
 
     }

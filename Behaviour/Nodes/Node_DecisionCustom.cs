@@ -6,26 +6,26 @@ using XNode;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("States/Decisions/Decision List"), NodeTint("#FFCD00")]
-    public class Node_DecisionList : NodeBase_Decision
+    [CreateNodeMenu("Decisions/Custom")]
+    public class Node_DecisionCustom : NodeBase_Decision
     {
         //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs
         private bool isAlreadyRename = false;
 
-        [SerializeField]
-        private List<AI_DecisionBase> aiDecisions;
+        [SerializeField, NodeAIDececision(true)]
+        private AI_DecisionBase aiDecision = null;
 
         [Output(typeConstraint = TypeConstraint.Strict)]
         public NodeBase_Decision outDecision;
+
+        public AI_DecisionBase AIDecision { get { return aiDecision; } }
 
         protected override void Init()
         {
             //Renomeia o nó na primeira vez que o nó é iniciado, isto previne o nome feio original do .cs
             if (!isAlreadyRename)
-                this.name = "Decision List";
+                this.name = "CustomDecision";
 
-            if (aiDecisions == null)
-                aiDecisions = new List<AI_DecisionBase>();
             isAlreadyRename = true;
 
             base.Init();
@@ -33,7 +33,12 @@ namespace XNode.FSMG
 
         public override bool Execute(FSMBehaviour fsm)
         {
-            bool result = !aiDecisions.Exists(r => r.Execute(fsm) == false);
+            CheckReferenceIsValid();
+
+            if (aiDecision == null)
+                return false;
+
+            bool result = aiDecision.Execute(fsm);
             return result;
         }
 
@@ -43,42 +48,32 @@ namespace XNode.FSMG
             //Quero mostrar o nome da ação anexada ao nó caso ela exista
             string label = FSMGUtility.StringTag_Undefined;
 
-            List<AI_DecisionBase> tmp = new List<AI_DecisionBase>(aiDecisions);
-            tmp.RemoveAll(r => r == null);
-
-            if (tmp.Count > 0)
+            if (aiDecision != null)
             {
-                label = "";
-                foreach (AI_DecisionBase decision in tmp)
-                {
-                    label += decision.name + "\n";
-
-                }
+                label = aiDecision.name;
             }
-            tmp.Clear();
-            tmp = null;
 
             return label;
 
         }
         public override INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            //Esonde a label caso nao haja nenhuma ação referenciada
+            CheckReferenceIsValid();
 
-            if (aiDecisions.Count <= 0)
+            //Esonde a label caso nao haja nenhuma ação referenciada
+            if (aiDecision == null)
                 return INodeNoodleLabelActiveType.Never;
-            else return INodeNoodleLabelActiveType.SelectedPair;
+
+            return INodeNoodleLabelActiveType.SelectedPair;
         }
 
-        private bool CheckReferenceIsValid(AI_DecisionBase aiDecision)
+        private void CheckReferenceIsValid()
         {
             if (aiDecision == null)
-                return false;
+                return;
 
             if (aiDecision.Graph != graph && aiDecision.Graph != null)
-                return false;
-
-            return true;
+                aiDecision = null;
         }
 
     }

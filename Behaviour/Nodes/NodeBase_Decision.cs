@@ -8,8 +8,8 @@ using XNode;
 namespace XNode.FSMG
 {
 
-
-	public abstract class NodeBase_Decision : Node, INodeNoodleLabel
+    [NodeTint("#CFA83D")]
+    public abstract class NodeBase_Decision : Node, INodeNoodleLabel
 	{
 		public abstract bool Execute(FSMBehaviour fsm);
         public override object GetValue(NodePort port)
@@ -25,7 +25,7 @@ namespace XNode.FSMG
         }
         public virtual INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            return  INodeNoodleLabelActiveType.Selected;
+            return  INodeNoodleLabelActiveType.SelectedPair;
         }
     }
 }

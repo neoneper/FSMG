@@ -6,8 +6,8 @@ using XNode.FSMG.Components;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("States/Actions/Action"), NodeTint("#0071E8")]
-    public class Node_Action : NodeBase_Action
+    [CreateNodeMenu("Actions/Custom")]
+    public class Node_ActionCustom : NodeBase_Action
     {
         //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs
         private bool isAlreadyRename = false;

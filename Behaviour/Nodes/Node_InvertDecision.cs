@@ -6,7 +6,7 @@ using XNode;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("States/Decisions/Invert"), NodeTint("#E87800"), NodeWidth(180)]
+    [CreateNodeMenu("Decisions/Invert"), NodeWidth(180)]
     public class Node_InvertDecision : NodeBase_Decision
     {
         //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs

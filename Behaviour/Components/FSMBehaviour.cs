@@ -17,7 +17,7 @@ namespace XNode.FSMG.Components
         private NavMeshAgent _navMeshAgent = null;
         private Rigidbody _rigidbody = null;
 
-        private List<FSMTarget> _targets = null;
+        private List<FSMTarget> _globalTargets = null;
 
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
@@ -25,6 +25,8 @@ namespace XNode.FSMG.Components
         [SerializeField]
         private AIAgentStats _agentStats = null;
 
+        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        private TargetListLocal targets = null;
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
         private IntVarList intVars = null;
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
@@ -60,7 +62,6 @@ namespace XNode.FSMG.Components
             }
         }
 
-
         public NavMeshAgent navMeshAgent
         {
             get
@@ -88,21 +89,38 @@ namespace XNode.FSMG.Components
         }
         public AIAgentStats agentStats { get { return _agentStats; } }
 
-        public List<FSMTarget> targets
+        public List<FSMTarget> globalTargets
         {
             get
             {
                 //A ideia é popular a lista somente a primeira vez que foi requisitado por este componente.
                 //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
-                if (_targets == null)
+                if (_globalTargets == null)
                 {
-                    _targets = FindObjectsOfType<FSMTarget>().ToList();
-                    _targets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
+                    _globalTargets = FindObjectsOfType<FSMTarget>().ToList();
+                    _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
                 }
 
-                return new List<FSMTarget>(_targets);
+                return new List<FSMTarget>(_globalTargets);
 
             }
+        }
+
+        public bool TryGetIntValue(string variable, out IntVar intVar)
+        {
+            return intVars.TryGetValue(variable, out intVar);
+        }
+        public bool TryGetFloatValue(string variable, out FloatVar floatVar)
+        {
+            return floatVars.TryGetValue(variable, out floatVar);
+        }
+        public bool TryGetDoubeValue(string variable, out DoubleVar doubleVar)
+        {
+            return doubleVars.TryGetValue(variable, out doubleVar);
+        }
+        public bool TryGetBooleanValue(string variable, out BoolVar boolVar)
+        {
+            return boolVars.TryGetValue(variable, out boolVar);
         }
 
         public GraphAddVarErrorsType AddVariable(string varName, GraphVarType varType)
@@ -199,10 +217,35 @@ namespace XNode.FSMG.Components
             return tagVariables;
 
         }
-        public FSMTarget GetTarget(string targetName)
+
+        public bool TryGetFSMTarget(string targetName, out FSMTarget fsmTarget, TargetLocalType localType)
         {
-            FSMTarget result = targets.Find(r => r.targetName.Equals(targetName));
-            return result;
+
+            switch (localType)
+            {
+                case TargetLocalType.global:
+                    fsmTarget = globalTargets.Find(r => r.targetName.Equals(targetName));
+                    break;
+                case TargetLocalType.local:
+
+                    TargetLocal localtarget = null;
+                    if (targets.TryGetValue(targetName, out localtarget))
+                    {
+                        fsmTarget = localtarget.fsmTarget;
+                    }
+                    else
+                    {
+                        fsmTarget = null;
+                    }
+                    break;
+                default:
+
+                    fsmTarget = null;
+                    break;
+
+            }
+
+            return fsmTarget != null;
         }
 
         /// <summary>
@@ -242,6 +285,8 @@ namespace XNode.FSMG.Components
         /// </summary>
         public void SyncVariables()
         {
+            SyncTargets();
+
             if (graph == null)
                 return;
 
@@ -249,7 +294,7 @@ namespace XNode.FSMG.Components
 
             TagVarList myTagVariables = GetVariablesAsTag();
 
-            _graph.GetVariables(out graphVariables);
+            _graph.GetTagVariables(out graphVariables);
 
             //Remove variaveis que estejam somente no componente mas que nao estejam no grafico
             foreach (string variable in myTagVariables.Keys)
@@ -290,12 +335,41 @@ namespace XNode.FSMG.Components
                 }
             }
 
-
-
             graphVariables.Clear();
             graphVariables = null;
-        }
 
+        }
+        private void SyncTargets()
+        {
+            if (graph == null)
+                return;
+
+            List<string> graphTargets = graph.GetTargetsName(TargetLocalType.local);
+            List<string> localtargets = targets.Keys.ToList();
+
+            //Remove variaveis que estejam somente no componente mas que nao estejam no grafico
+            foreach (string gt in localtargets)
+            {
+                if (graphTargets.Contains(gt) == false)
+                {
+                    targets.Remove(gt);
+                }
+            }
+            localtargets.Clear();
+            localtargets = null;
+
+            //Adiciona variaveis marcadas no grafico que não existam no FSM
+            foreach (string gt in graphTargets)
+            {
+                if (targets.ContainsKey(gt) == false)
+                {
+                    targets.Add(gt, new TargetLocal());
+                }
+            }
+
+            graphTargets.Clear();
+            graphTargets = null;
+        }
         public bool CheckIfCountDownElapsed(float duration)
         {
             if (graph == null)

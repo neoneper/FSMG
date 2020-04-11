@@ -41,12 +41,22 @@ namespace XNodeEditor.FSMG
             GUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
 
             if (GUILayout.Button("Play", EditorStyles.toolbarButton)) { graph.UpdateGraph(null); }
-            if (GUILayout.Button("Globals", EditorStyles.toolbarButton)) { FSMGSettings.OpenSeetingsWindows(); }
+            if (GUILayout.Button("Globals", EditorStyles.toolbarButton)) { FSMGSettingsPreferences.OpenSeetingsWindows(); }
 
 
             GUILayout.EndHorizontal();
 
             NodeGraphEditorUtility.DrawNoodleLabels(window);
+        }
+
+        public override void OnCreate()
+        {
+            if (graph == null)
+                graph = (Graph_State)target;
+
+            graph.SetSettings(FSMGSettingsPreferences.GetOrCreateSettings());
+
+            base.OnCreate();
         }
     }
 
@@ -59,7 +69,7 @@ namespace XNodeEditor.FSMG
         private string new_varErrorMsg = "";
         private string new_varName = FSMGUtility.StringTag_Undefined;
         private GraphVarType new_varType = GraphVarType.Integer;
-
+        
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -79,7 +89,6 @@ namespace XNodeEditor.FSMG
 
             serializedObject.ApplyModifiedProperties();
         }
-
         private void Draw_CreateVariablePanel()
         {
             Graph_State graph = (Graph_State)target;
@@ -122,7 +131,6 @@ namespace XNodeEditor.FSMG
                 EditorGUILayout.EndHorizontal();
             }
         }
-
         private void DrawDefaultErrorPanel()
         {
             if (show_defaultErrorPanel)

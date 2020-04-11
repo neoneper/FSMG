@@ -28,7 +28,7 @@ namespace XNode.FSMG
         /// </summary>
         /// <param name="fsm"></param>
         public abstract void Execute(FSMBehaviour fsm);
-        
+
         /// <summary>
         /// Atualiza o estado atual do grafico: <seealso cref="Graph_State.CurrentState"/>, para este estado.
         /// Cao seja efetivada a mudança o evento <seealso cref=" OnCurrentState"/> sera chamado.
@@ -41,7 +41,7 @@ namespace XNode.FSMG
             }
 
         }
-        
+
         /// <summary>
         /// Disparado quando <seealso cref="SetCurrentState"/> é executado para trocar o atual nó de atualização do grafico.
         /// Tenha em mente que o nó devera ter sido modificado efetivamente no grafico para este evento ser chamado.
@@ -65,11 +65,6 @@ namespace XNode.FSMG
         }
 
         //Funções somente para testes em modo editor. com eleas e possivel setar manualmente um nó atual e default
-        [ContextMenu("SetRoot")]        
-        public void SetGraphRoot()
-        {
-            Graph.SetRootState(this);
-        }
         [ContextMenu("SetCurrent")]
         public void SetGraphCurrent()
         {

@@ -9,7 +9,7 @@ namespace XNode.FSMG.Components
     [AddComponentMenu("FSM/Controller")]
     public class FSM : FSMBehaviour
     {
-        private void Awake()
+        private void Start()
         {
             if (graph != null)
             {

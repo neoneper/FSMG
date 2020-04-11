@@ -7,8 +7,8 @@ using XNode;
 namespace XNode.FSMG
 {
 
-    [CreateNodeMenu("States/State")]
-    public class Node_State : NodeBase_State
+    [CreateNodeMenu("States/Loop")]
+    public class Node_StateLoop : NodeBase_State
     {
         private NodePort InStatePort { get { return GetInputPort("inStates"); } }
         private NodePort InActionsPort { get { return GetInputPort("inActions"); } }
@@ -30,7 +30,7 @@ namespace XNode.FSMG
         {
             //Renomeia o nó na primeira vez que o nó é iniciado, isto previne o nome feio original do .cs
             if (!isAlreadyRename)
-                this.name = "State";
+                this.name = "Loop";
 
             isAlreadyRename = true;
 

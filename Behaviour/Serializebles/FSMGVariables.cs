@@ -152,6 +152,8 @@ namespace XNode.FSMG
         Double,
         Boolean
     }
+    public enum GraphVarLocalType { Local, Global }
+
 
     [Serializable]
     public enum GraphAddVarErrorsType

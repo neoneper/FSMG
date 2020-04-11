@@ -6,7 +6,7 @@ using UnityEngine;
 namespace XNode.FSMG
 {
 
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
     public class GraphStateAttribute : PropertyAttribute
     {
         private string callbackname;

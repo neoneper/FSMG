@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode.FSMG.SerializableDictionary;
 using System.Linq;
+using Unity.Collections;
+using System;
 
 namespace XNode.FSMG
 {
@@ -11,16 +13,21 @@ namespace XNode.FSMG
     public class Graph_State : NodeGraph
     {
 
+
         public delegate void DelegateOnGraphStateChanged();
         public event DelegateOnGraphStateChanged OnStateChangedEvent;
 
         private float currentState_elapsedTime = 0;
+        private FSMBehaviour last_fsm_executed = null;
+
+        [SerializeField, ReadOnly]
+        private FSMGSettings settings;
 
         //Nó atual do grafico para ser atualizado pelo FSM
         private NodeBase_State _currentState;
         //Nó raiz, primeiro nó a ser atualizado pelo FSM quando iniciado
         private NodeBase_State _rootState;
-
+        public FSMBehaviour LastFSMExecute { get { return last_fsm_executed; } }
         public float CurrentStateElapsedTime
         {
             get { return currentState_elapsedTime; }
@@ -48,6 +55,7 @@ namespace XNode.FSMG
                 return;
             }
 
+            last_fsm_executed = fsm;
             currentState_elapsedTime += Time.deltaTime;
             _currentState.Execute(fsm);
         }
@@ -58,6 +66,7 @@ namespace XNode.FSMG
 
             if (RootState == null)
             {
+
                 XNode.Node node = nodes.FirstOrDefault(r => r is NodeBase_State);
                 if (node != null)
                 {
@@ -104,16 +113,175 @@ namespace XNode.FSMG
         //=======================================================================================//
         //VARIAVEIS CUSTOMIZADAS
         //======================================================================================//
+
         [SerializeField, DrawKeyAsLabel(), DrawOptions(false, true, true)]
         private TagVarList variables = null;
+        [SerializeField]
+        private TargetListGlobal targets = null;
 
-        public void GetVariables(out TagVarList toList)
+
+        public void GetTagVariables(out TagVarList toList)
         {
             TagVarList tmp = new TagVarList();
             tmp.CopyFrom(variables);
             toList = tmp;
         }
+        public bool TryGetIntVar(string varName, out IntVar intVar, GraphVarLocalType localType)
+        {
+            bool result = false;
 
+            switch (localType)
+            {
+                case GraphVarLocalType.Local:
+                    result = last_fsm_executed.TryGetIntValue(varName, out intVar);
+                    break;
+                case GraphVarLocalType.Global:
+                    result = settings.TryGetIntVar(varName, out intVar);
+                    break;
+                default:
+                    intVar = null;
+                    break;
+            }
+
+            return result;
+
+        }
+        public bool TryGetFloatVar(string varName, out FloatVar floatVar, GraphVarLocalType localType)
+        {
+            bool result = false;
+
+            switch (localType)
+            {
+                case GraphVarLocalType.Local:
+                    result = last_fsm_executed.TryGetFloatValue(varName, out floatVar);
+                    break;
+                case GraphVarLocalType.Global:
+                    result = settings.TryGetFloatVar(varName, out floatVar);
+                    break;
+                default:
+                    floatVar = null;
+                    break;
+            }
+
+            return result;
+        }
+        public bool TryGetDoubeVar(string varName, out DoubleVar doubleVar, GraphVarLocalType localType)
+        {
+            bool result = false;
+
+            switch (localType)
+            {
+                case GraphVarLocalType.Local:
+                    result = last_fsm_executed.TryGetDoubeValue(varName, out doubleVar);
+                    break;
+                case GraphVarLocalType.Global:
+                    result = settings.TryGetDoubeVar(varName, out doubleVar);
+                    break;
+                default:
+                    doubleVar = null;
+                    break;
+            }
+
+            return result;
+        }
+        public bool TryGetBoolVar(string varName, out BoolVar boolVar, GraphVarLocalType localType)
+        {
+            bool result = false;
+
+            switch (localType)
+            {
+                case GraphVarLocalType.Local:
+                    result = last_fsm_executed.TryGetBooleanValue(varName, out boolVar);
+                    break;
+                case GraphVarLocalType.Global:
+                    result = settings.TryGetBoolVar(varName, out boolVar);
+                    break;
+                default:
+                    boolVar = null;
+                    break;
+            }
+
+            return result;
+        }
+        public bool TryGetTarget(string targetName, out FSMTarget fsmTarget, TargetLocalType localType)
+        {
+            return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTarget, localType);
+        }
+
+        public List<string> GetGlobalVariablesName(GraphVarType vartype)
+        {
+            List<string> variablesName = null;
+            switch (vartype)
+            {
+                case GraphVarType.Integer:
+                    variablesName = settings.Int_VariablesName.ToList();
+                    break;
+                case GraphVarType.Float:
+                    variablesName = settings.Float_VariablesName.ToList();
+                    break;
+                case GraphVarType.Double:
+                    variablesName = settings.Double_VariablesName.ToList();
+                    break;
+                case GraphVarType.Boolean:
+                    variablesName = settings.Bool_VariablesName.ToList();
+                    break;
+            }
+
+            return variablesName;
+        }
+        public List<string> GetLocalVariablesName(GraphVarType vartype)
+        {
+            TagVarList taglist;
+            GetTagVariables(out taglist);
+
+            List<string> variablesName = new List<string>();
+
+            if (taglist.Count > 0)
+            {
+                foreach (string varname in taglist.Keys)
+                {
+                    if (taglist[varname] == vartype)
+                        variablesName.Add(varname);
+                }
+            }
+
+            taglist.Clear();
+            taglist = null;
+
+            return variablesName;
+        }
+        public List<string> GetGlobalTargetsName()
+        {
+            return settings.TargetsName.ToList();
+        }
+        public List<string> GetLocalTargetsName()
+        {
+            return targets.Keys.ToList();
+        }
+
+        public List<string> GetVariablesName(GraphVarType vartype, GraphVarLocalType localType)
+        {
+            if (localType == GraphVarLocalType.Global)
+                return GetGlobalVariablesName(vartype);
+            else
+                return GetLocalVariablesName(vartype);
+
+        }
+        public List<string> GetTargetsName(TargetLocalType localType)
+        {
+            if (localType == TargetLocalType.global)
+                return GetGlobalTargetsName();
+            else
+                return GetLocalTargetsName();
+
+        }
+
+
+
+        public void SetSettings(FSMGSettings settings)
+        {
+            this.settings = settings;
+        }
         public GraphAddVarErrorsType AddTagVariable(string varName, GraphVarType varType)
         {
             GraphAddVarErrorsType result = GraphAddVarErrorsType.none;
@@ -133,11 +301,56 @@ namespace XNode.FSMG
             return result;
         }
 
+        public override NodeGraph Copy()
+        {
+            Graph_State cp = (Graph_State)base.Copy();
+            int indexOfRoot = nodes.IndexOf(RootState);
+            int indexOfCurrent = nodes.IndexOf(CurrentState);
+
+            //Confirmando os nos current e root, pois por algum motivos eles perdem a referencia quando sao instanciados
+            cp._currentState = (NodeBase_State)cp.nodes[indexOfRoot];
+            cp._rootState = (NodeBase_State)cp.nodes[indexOfCurrent];
+
+
+            //Troca a referencia dos estados que são referencia nos nós de JUMP STATE.
+            List<Node> jumps = cp.nodes.FindAll(r => r is Node_StateJump);
+            foreach(Node j in jumps)
+            {
+                Node_StateJump nj = (Node_StateJump)j;
+                nj.goToState = (NodeBase_State)cp.nodes[nodes.IndexOf(nj.goToState)];
+            }
+
+            //Renomeia os nos instanciados pois por algum motivo eles perdem o nome quando sao instanciado
+            for (int i = 0; i < cp.nodes.Count; i++)
+                cp.nodes[i].name = nodes[i].name;
+
+            return cp;
+
+        }
+        public override Node AddNode(Type type)
+        {
+            //So pode haver 1 RootNode no grafico
+            if (type == typeof(Node_StateRoot))
+            {
+                if (nodes.Exists(r => r.GetType() == typeof(Node_StateRoot)))
+                {
+                    return base.AddNode(typeof(Node_StateLoop));
+                }
+            }
+
+            return base.AddNode(type);
+        }
+
+        public override void RemoveNode(Node node)
+        {
+            base.RemoveNode(node);
+        }
         public Graph_State Instance
         {
             get
             {
-                return (Graph_State)this.Copy();
+                NodeGraph ncp = Copy();
+                return ncp as Graph_State;
             }
         }
 

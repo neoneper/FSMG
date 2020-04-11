@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,8 +27,8 @@ namespace XNodeEditor.FSMG
             public static GUIContent targetsContent = new GUIContent("    Targets");
             public static GUIContent intContent = new GUIContent("    IntVariables");
             public static GUIContent floatContent = new GUIContent("    FloatVariables");
-            public static GUIContent boolContent = new GUIContent("    DoubleVariables");
-            public static GUIContent doubleContent = new GUIContent("    BooleanVariables");
+            public static GUIContent doubleContent = new GUIContent("    DoubleVariables");
+            public static GUIContent boolContent = new GUIContent("    BooleanVariables");
         }
 
         public FSMSettingsProvider(string path, SettingsScope scope = SettingsScope.User) : base(path, scope) { }
@@ -35,7 +36,7 @@ namespace XNodeEditor.FSMG
         public override void OnActivate(string searchContext, VisualElement rootElement)
         {
             // This function is called when the user clicks on the MyCustom element in the Settings window.
-            m_CustomSettings = FSMGSettings.GetSerializedSettings();
+            m_CustomSettings = FSMGSettingsPreferences.GetSerializedSettings();
 
             targetList = m_CustomSettings.FindProperty("targets");
             intList = m_CustomSettings.FindProperty("intVars");
@@ -84,7 +85,7 @@ namespace XNodeEditor.FSMG
                     break;
                 case 4:
                     if (boolList != null)
-                        EditorGUILayout.PropertyField(doubleList, Styles.boolContent, true);
+                        EditorGUILayout.PropertyField(boolList, Styles.boolContent, true);
                     break;
             }
 
@@ -109,5 +110,47 @@ namespace XNodeEditor.FSMG
         }
     }
 
+    public class FSMGSettingsPreferences
+    {
+        public const string _customSettingsPath = "Assets/Editor/FSMGSettings/FSMGSettings.asset";
+
+
+        public static FSMGSettings GetOrCreateSettings()
+        {
+            FSMGSettings settings = null;
+
+
+            if (AssetDatabase.IsValidFolder("Assets/Editor") == false)
+                AssetDatabase.CreateFolder("Assets", "Editor");
+            if (AssetDatabase.IsValidFolder("Assets/Editor/FSMGSettings") == false)
+                AssetDatabase.CreateFolder("Assets/Editor", "FSMGSettings");
+
+            FSMGSettings[] allSettings = ScriptableObjectUtility.GetAllInstances<FSMGSettings>();
+            settings = allSettings.ToList().FirstOrDefault();
+
+            if (settings == null)
+            {
+                settings = ScriptableObject.CreateInstance<FSMGSettings>();
+
+                AssetDatabase.CreateAsset(settings, _customSettingsPath);
+                AssetDatabase.SaveAssets();
+
+            }
+
+
+            return settings;
+        }
+        public static SerializedObject GetSerializedSettings()
+        {
+            return new SerializedObject(GetOrCreateSettings());
+        }
+        [MenuItem("FSMG/Globals")]
+        public static void OpenSeetingsWindows()
+        {
+
+            SettingsService.OpenProjectSettings("Project/FSMGraph Globals");
+
+        }
+    }
 
 }

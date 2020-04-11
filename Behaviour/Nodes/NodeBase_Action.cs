@@ -6,7 +6,8 @@ using XNode.FSMG.Components;
 
 namespace XNode.FSMG
 {
-	public abstract class NodeBase_Action : Node, INodeNoodleLabel
+    [NodeTint("#4AA7FF")]
+    public abstract class NodeBase_Action : Node, INodeNoodleLabel
 	{
 		public abstract void Execute(FSMBehaviour fsm);
         
@@ -22,7 +23,7 @@ namespace XNode.FSMG
         }
         public virtual INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            return INodeNoodleLabelActiveType.Selected;
+            return INodeNoodleLabelActiveType.Never;
         }
 
        

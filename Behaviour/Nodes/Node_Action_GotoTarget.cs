@@ -7,47 +7,48 @@ using XNode.FSMG.Components;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("States/Actions/GoToTarget"), NodeTint("#0071E8")]
+    [CreateNodeMenu("Actions/GoToTarget")]
     public class Node_Action_GotoTarget : NodeBase_Action
     {
-        //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs
-        private bool isAlreadyRename = false;
+
+        private FSMTarget go = null;
+        private FSMTarget TargetGo
+        {
+            get
+            {
+                if (go == null)
+                {
+                    go = GetInputValue<FSMTarget>("inputTarget", this.inputTarget);
+                }
+
+                return go;
+            }
+        }
+        [Input(connectionType = ConnectionType.Override, typeConstraint = TypeConstraint.Strict, backingValue = ShowBackingValue.Never)]
+        public FSMTarget inputTarget;
 
         [Output]
         public NodeBase_Action outAction = null;
 
-        [FSMTargets(filterIsEnnable: false, nodeEnum: true), SerializeField]
-        private string targetName = "";
-
-
-        protected override void Init()
-        {
-            //Renomeia o nó na primeira vez que o nó é iniciado, isto previne o nome feio original do .cs
-            if (!isAlreadyRename)
-                this.name = "GoToTarget";
-
-            isAlreadyRename = true;
-
-            base.Init();
-        }
         public override void Execute(FSMBehaviour fsm)
         {
             if (Application.isEditor && Application.isPlaying == false)
                 return;
 
+
             NavMeshAgent agent = fsm.navMeshAgent;
-            FSMTarget target = fsm.GetTarget(targetName);
+            FSMTarget target = TargetGo;
             AIAgentStats agentStats = fsm.agentStats;
 
-            Transform chase = null;
-
-            if (targetName == FSMTarget.UndefinedTag || agentStats == null || target == null)
+            if (TargetGo == null)
             {
                 agent.ResetPath();
                 agent.isStopped = true;
                 return;
             }
 
+
+            Transform chase = null;
             chase = target.transform;
 
             agent.destination = chase.position;
@@ -63,16 +64,7 @@ namespace XNode.FSMG
             }
         }
 
-        //Modificando as propriedades da label de conexões
-        public override string GetNoodleLabel()
-        {
-            return "Go To " + targetName;
-        }
-        public override INodeNoodleLabelActiveType GetNoodleLabelActive()
-        {
-            return INodeNoodleLabelActiveType.SelectedPair;
-        }
-
+        
 
     }
 }

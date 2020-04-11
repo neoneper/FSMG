@@ -10,8 +10,8 @@ using XNode.FSMG.Components;
 
 namespace XNodeEditor.FSMG
 {
-    [CustomPropertyDrawer(typeof(FSMTargetsAttribute))]
-    public class FSMTargetsAttributeDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(GraphVarAttribute))]
+    public class GraphVarAttributeDrawer : PropertyDrawer
     {
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -25,7 +25,6 @@ namespace XNodeEditor.FSMG
             EditorGUI.EndProperty();
 
         }
-
         private void ContextPopUp(Rect position, SerializedProperty property, GUIContent label)
         {
             // Throw error on wrong type
@@ -33,23 +32,10 @@ namespace XNodeEditor.FSMG
             {
                 throw new ArgumentException("Parameter selected must be of type System.String");
             }
-
-            // Add label
-            // position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
-
-
             EditorGUI.BeginChangeCheck();
-
-            // Store old indent level and set it to 0, the PrefixLabel takes care of it
-
-            // position = EditorGUI.PrefixLabel(position, label);
-
-            //int indent = EditorGUI.indentLevel;
-            //EditorGUI.indentLevel = 0;
 
             Rect buttonRect = position;
             Rect buttonGo = position;
-
 
             string currentValue = property.stringValue;
             if (string.IsNullOrEmpty(currentValue))
@@ -58,12 +44,9 @@ namespace XNodeEditor.FSMG
                 currentValue = property.stringValue;
             }
 
-
-
-
             if (GUI.Button(buttonRect, currentValue))
             {
-                FSMTargetsAttribute attr = (FSMTargetsAttribute)attribute;
+                GraphVarAttribute attr = (GraphVarAttribute)attribute;
 
                 if (attr.UseNodeEnum)
                 {
@@ -76,54 +59,39 @@ namespace XNodeEditor.FSMG
                 }
             }
 
-
-            // position.x += buttonRect.width + 4;
-            // position.width -= buttonRect.width + 4;
-            //EditorGUI.ObjectField(position, property, typeof(StateNode), GUIContent.none);
-
             if (EditorGUI.EndChangeCheck())
                 property.serializedObject.ApplyModifiedProperties();
 
-            //EditorGUI.indentLevel = indent;
         }
         private void ShowContextMenuAtMouse(SerializedProperty property)
         {
             GenericMenu menu = new GenericMenu();
-            FSMTargetsAttribute attr = (FSMTargetsAttribute)attribute;
+            GraphVarAttribute attr = (GraphVarAttribute)attribute;
 
             object target = PropertyUtility.GetTargetObjectWithProperty(property);
 
-
+            object valuesObject = GetValues(property, attr.ValuesName);
             menu.AddItem(new GUIContent(FSMTarget.UndefinedTag), false, () => SelectMatInfo(property, FSMTarget.UndefinedTag, target));
 
-            string[] guids = FSMGSettingsPreferences.GetOrCreateSettings().TargetsName;
 
-            List<FSMTarget> _targets = Resources.FindObjectsOfTypeAll<FSMTarget>().ToList();
-            _targets.RemoveAll(r => r.IsUndefindedTarget);
 
-            for (int i = 0; i < guids.Length; i++)
+            if (valuesObject is IList)
             {
+                IList valuesList = (IList)valuesObject;
 
-                GUIContent content = new GUIContent(guids[i]);
-
-                if (attr.IsFilterEnnable == true && _targets.Exists(r => r.targetName.Equals(guids[i]))
-                    || (guids[i] == FSMTarget.UndefinedTag && guids[i] == property.stringValue))
+                for (int i = 0; i < valuesList.Count; i++)
                 {
-                    menu.AddDisabledItem(content, guids[i] == property.stringValue);
+                    GUIContent content = new GUIContent(valuesList[i].ToString());
+                    menu.AddItem(content, valuesList[i].ToString() == property.stringValue, () => SelectMatInfo(property, content.text, target));
                 }
-                else
-                {
-                    menu.AddItem(content, guids[i] == property.stringValue, () => SelectMatInfo(property, content.text, target));
-                }
-
-            } 
+            }
 
             menu.ShowAsContext();
         }
 
         private void SelectMatInfo(SerializedProperty property, string stateNode, object target)
         {
-            FSMTargetsAttribute nodeFilter = (FSMTargetsAttribute)attribute;
+            GraphVarAttribute nodeFilter = (GraphVarAttribute)attribute;
 
             property.stringValue = stateNode;
 
@@ -166,5 +134,33 @@ namespace XNodeEditor.FSMG
             }
 
         }
+        private object GetValues(SerializedProperty property, string valuesName)
+        {
+            object target = PropertyUtility.GetTargetObjectWithProperty(property);
+
+            FieldInfo valuesFieldInfo = ReflectionUtility.GetField(target, valuesName);
+            if (valuesFieldInfo != null)
+            {
+                return valuesFieldInfo.GetValue(target);
+            }
+
+            PropertyInfo valuesPropertyInfo = ReflectionUtility.GetProperty(target, valuesName);
+            if (valuesPropertyInfo != null)
+            {
+                return valuesPropertyInfo.GetValue(target);
+            }
+
+            MethodInfo methodValuesInfo = ReflectionUtility.GetMethod(target, valuesName);
+            if (methodValuesInfo != null &&
+                methodValuesInfo.ReturnType != typeof(void) &&
+                methodValuesInfo.GetParameters().Length == 0)
+            {
+                return methodValuesInfo.Invoke(target, null);
+            }
+
+            return null;
+        }
+
+
     }
 }
