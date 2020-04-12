@@ -5,6 +5,15 @@ It allows the creation of global and local variables, as well as customized rout
 
 It is still in the testing phase.
 
+- Allows multiple IAs per Graph.
+- Creation of local and global variables directly on the graph.
+- Creation of direct local and global routes on the graph.
+- 100% PlugAndPlay. You can create new states or just new ones.
+- All categories of actions (Actions, Decisions and States) have an "API", which allows the user to create a custom resource for them, in case the user does not want to create new blocks.
+-------------------------------------------
+FSMG reports, is still being born, spend a lot of time developing and there is still no active time to document or to work with real use cases.
+
+Anyway. It is open to anyone who wants to contribute or use only. User comments are welcome.
 Fell free to use and to help improve.
 
 PS: To work with FSGM you need download XNODE Pack. 
