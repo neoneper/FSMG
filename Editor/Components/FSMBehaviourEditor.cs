@@ -5,7 +5,7 @@ using UnityEngine;
 using XNode.FSMG;
 using XNode.FSMG.Components;
 
-[CustomEditor(typeof(FSM)), CanEditMultipleObjects]
+[CustomEditor(typeof(FSMBehaviour), true), CanEditMultipleObjects]
 public class FSMBehaviourEditor : Editor
 {
     private bool onSyncVariables = false;

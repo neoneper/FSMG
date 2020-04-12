@@ -8,22 +8,15 @@ using XNode.FSMG.SerializableDictionary;
 
 namespace XNode.FSMG.Components
 {
-    [RequireComponent(typeof(NavMeshAgent))]
-    [RequireComponent(typeof(Rigidbody))]
+   
     public abstract class FSMBehaviour : MonoBehaviour
     {
         private bool isGraphInstantied = false;
-
-        private NavMeshAgent _navMeshAgent = null;
-        private Rigidbody _rigidbody = null;
 
         private List<FSMTarget> _globalTargets = null;
 
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
-
-        [SerializeField]
-        private AIAgentStats _agentStats = null;
 
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
         private TargetListLocal targets = null;
@@ -40,11 +33,7 @@ namespace XNode.FSMG.Components
         public bool isReady
         {
             get { return readyToWork; }
-            set
-            {
-                navMeshAgent.enabled = value;
-                readyToWork = value;
-            }
+            set { readyToWork = value; }
         }
 
         public Graph_State graph
@@ -61,34 +50,7 @@ namespace XNode.FSMG.Components
                 return _graph;
             }
         }
-
-        public NavMeshAgent navMeshAgent
-        {
-            get
-            {
-
-                if (_navMeshAgent == null)
-                    _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-                if (_navMeshAgent == null)
-                    _navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
-
-                return _navMeshAgent;
-
-
-            }
-        }
-        public Rigidbody rigidBody
-        {
-            get
-            {
-                if (_rigidbody == null)
-                    _rigidbody = GetComponent<Rigidbody>();
-
-                return _rigidbody;
-            }
-        }
-        public AIAgentStats agentStats { get { return _agentStats; } }
-
+               
         public List<FSMTarget> globalTargets
         {
             get
@@ -278,6 +240,7 @@ namespace XNode.FSMG.Components
             floatVars.Clear();
             doubleVars.Clear();
             boolVars.Clear();
+            targets.Clear();
         }
 
         /// <summary>

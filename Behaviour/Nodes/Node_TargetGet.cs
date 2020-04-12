@@ -13,7 +13,7 @@ namespace XNode.FSMG
     public class Node_TargetGet : Node
     {
         [SerializeField, NodeEnum]
-        private TargetLocalType localType;
+        private TargetLocalType localType = TargetLocalType.local;
 
         [SerializeField, GraphVar(true, "GetTargetsName")]
         private string targetName = "";
