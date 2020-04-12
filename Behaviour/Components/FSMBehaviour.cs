@@ -8,7 +8,9 @@ using XNode.FSMG.SerializableDictionary;
 
 namespace XNode.FSMG.Components
 {
-   
+    /// <summary>
+    /// Base component to create FSM components in behaviours
+    /// </summary>
     public abstract class FSMBehaviour : MonoBehaviour
     {
         private bool isGraphInstantied = false;
@@ -50,7 +52,7 @@ namespace XNode.FSMG.Components
                 return _graph;
             }
         }
-               
+
         public List<FSMTarget> globalTargets
         {
             get
