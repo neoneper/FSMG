@@ -1,0 +1,11 @@
+{
+  "name": "com.neoneper.fsmg",
+  "displayName": "FSMG",
+  "version": "0.0.1",
+  "unity": "2019.3",
+  "description": "Finite State Machine Graph",
+  "keywords": [ "fsm", "fsmg", "ia" ],
+  "category": "tools",
+  "dependencies": {
+  }
+}
