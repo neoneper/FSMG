@@ -1,6 +1,8 @@
 # FSMG Last Update at Unity 2019.3.9f1
 https://www.youtube.com/watch?v=WlDU9wm8t6c&t=28s
 
+Doc: https://github.com/neoneper/FSMG/wiki
+
 It is a graphic finite state machine maked in Unity, developed to work with artificial intelligence.
 The FSMgraph was designed to be fully expandable.
 It allows the creation of global and local variables, as well as customized routes, without the need for programming and multiples IA can be using the same graph too.
