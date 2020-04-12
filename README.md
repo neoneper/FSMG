@@ -2,6 +2,7 @@
 https://www.youtube.com/watch?v=WlDU9wm8t6c&t=28s
 
 Doc: https://github.com/neoneper/FSMG/wiki
+Discord: https://discord.gg/pG9X7q
 
 It is a graphic finite state machine maked in Unity, developed to work with artificial intelligence.
 The FSMgraph was designed to be fully expandable.
