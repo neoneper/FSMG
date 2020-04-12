@@ -15,7 +15,7 @@ It is still in the testing phase.
 - 100% PlugAndPlay. You can create new states or just new ones.
 - All categories of actions (Actions, Decisions and States) have an "API", which allows the user to create a custom resource for them, in case the user does not want to create new blocks.
 -------------------------------------------
-FSMG reports, is still being born, spend a lot of time developing and there is still no active time to document or to work with real use cases.
+FSMG reports still being born, i spended a lot of time developing and there i stilled no active time to document or to work with real use cases.
 
 Anyway. It is open to anyone who wants to contribute or use only. User comments are welcome.
 Fell free to use and to help improve.
