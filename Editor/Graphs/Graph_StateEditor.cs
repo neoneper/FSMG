@@ -40,7 +40,7 @@ namespace XNodeEditor.FSMG
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar, GUILayout.ExpandWidth(true));
 
-            if (GUILayout.Button("Play", EditorStyles.toolbarButton)) { graph.UpdateGraph(null); }
+            //if (GUILayout.Button("Play", EditorStyles.toolbarButton)) { graph.UpdateGraph(null); }
             if (GUILayout.Button("Globals", EditorStyles.toolbarButton)) { FSMGSettingsPreferences.OpenSeetingsWindows(); }
 
 
