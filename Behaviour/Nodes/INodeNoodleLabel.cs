@@ -8,12 +8,11 @@ namespace XNode
     {
         Never,
         Selected,
-        Alwes,
-        SelectedPair
+        Alwes
     }
     public interface INodeNoodleLabel
     {
-        string GetNoodleLabel();
+        string GetNoodleLabel(NodePort port);
         INodeNoodleLabelActiveType GetNoodleLabelActive();
 
     }

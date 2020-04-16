@@ -52,15 +52,44 @@ namespace XNodeEditor
                         gridPoints.Add(fromRect.center);
                         gridPoints.AddRange(reroutePoints);
                         gridPoints.Add(toRect.center);
-                        DrawNoodleLabesPositions(gridPoints, node);
+                        DrawNoodleLabesPositions(gridPoints, node, input);
+
+
+                    }
+                }
+
+                foreach (XNode.NodePort input in node.Inputs)
+                {
+                    //Needs cleanup. Null checks are ugly
+                    Rect fromRect;
+                    if (!window.portConnectionPoints.TryGetValue(input, out fromRect)) continue;
+
+                    for (int k = 0; k < input.ConnectionCount; k++)
+                    {
+                        XNode.NodePort output = input.GetConnection(k);
+
+                        // Error handling
+                        if (output == null) continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
+                        //if (!input.IsConnectedTo(output)) input.Connect(output);
+                        Rect toRect;
+                        if (!window.portConnectionPoints.TryGetValue(output, out toRect)) continue;
+
+                        List<Vector2> reroutePoints = output.GetReroutePoints(k);
+
+                        gridPoints.Clear();
+                        gridPoints.Add(fromRect.center);
+                        gridPoints.AddRange(reroutePoints);
+                        gridPoints.Add(toRect.center);
+
+                        DrawNoodleLabesPositions(gridPoints, node, output);
 
 
                     }
                 }
             }
-
         }
-        private static void DrawNoodleLabesPositions(List<Vector2> gridPoints, Node node)
+
+        private static void DrawNoodleLabesPositions(List<Vector2> gridPoints, Node node, NodePort port)
         {
             NoodlePath path = NodeEditorPreferences.GetSettings().noodlePath;
             NoodleStroke stroke = NodeEditorPreferences.GetSettings().noodleStroke;
@@ -124,10 +153,7 @@ namespace XNodeEditor
                     break;
             }
 
-
-
-
-            GUIContent content = new GUIContent(((INodeNoodleLabel)node).GetNoodleLabel());
+            GUIContent content = new GUIContent(((INodeNoodleLabel)node).GetNoodleLabel(port));
             Vector2 size = EditorStyles.helpBox.CalcSize(content);
 
             labelPosition.y -= size.y / 2;
@@ -172,20 +198,6 @@ namespace XNodeEditor
                     break;
                 case INodeNoodleLabelActiveType.Selected:
                     result = selectedObject == node;
-                    break;
-                case INodeNoodleLabelActiveType.SelectedPair:
-
-                    result = selectedObject == node;
-
-                    if (!result)
-                    {
-
-                        List<NodePort> ports = node.Outputs.ToList();
-                        ports.RemoveAll(r => r.Connection == null);
-                        ports.RemoveAll(r => r.Connection.node == null);
-                        if (ports.Count > 0)
-                            result = ports.Exists(r => r.Connection.node == selectedObject);
-                    }
                     break;
             }
 

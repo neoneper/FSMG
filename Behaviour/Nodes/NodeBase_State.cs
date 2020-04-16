@@ -55,7 +55,7 @@ namespace XNode.FSMG
         }
 
         //INodeNoodles: Label das conexões
-        public virtual string GetNoodleLabel()
+        public virtual string GetNoodleLabel(NodePort port)
         {
             return this.name;
         }

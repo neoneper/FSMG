@@ -49,7 +49,7 @@ namespace XNode.FSMG
 
         }
 
-        public override string GetNoodleLabel()
+        public override string GetNoodleLabel(NodePort port)
         {
             NodePort inPort = GetInputPort("inDecision");
             string label = FSMGUtility.StringTag_Undefined;
@@ -57,14 +57,14 @@ namespace XNode.FSMG
             {
                 NodeBase_Decision nodeDecision = (NodeBase_Decision)inPort.Connection.node;
 
-                label = "(Not) - " + nodeDecision.GetNoodleLabel();
+                label = "(Not) - " + nodeDecision.GetNoodleLabel(inPort);
             }
 
             return label;
         }
         public override INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            return INodeNoodleLabelActiveType.SelectedPair;
+            return INodeNoodleLabelActiveType.Selected;
         }
 
 

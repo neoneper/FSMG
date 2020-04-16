@@ -43,7 +43,7 @@ namespace XNode.FSMG
         }
 
         //Modificando as propriedades da label de conexões
-        public override string GetNoodleLabel()
+        public override string GetNoodleLabel(NodePort port)
         {
             //Quero mostrar o nome da ação anexada ao nó caso ela exista
             string label = FSMGUtility.StringTag_Undefined;
@@ -64,7 +64,7 @@ namespace XNode.FSMG
             if (aiDecision == null)
                 return INodeNoodleLabelActiveType.Never;
 
-            return INodeNoodleLabelActiveType.SelectedPair;
+            return INodeNoodleLabelActiveType.Selected;
         }
 
         private void CheckReferenceIsValid()

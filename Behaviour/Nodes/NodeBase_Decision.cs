@@ -19,13 +19,13 @@ namespace XNode.FSMG
                
 
         //INodeNoodles: Label das conexões
-        public virtual string GetNoodleLabel()
+        public virtual string GetNoodleLabel(NodePort port)
         {
             return this.name;
         }
         public virtual INodeNoodleLabelActiveType GetNoodleLabelActive()
         {
-            return  INodeNoodleLabelActiveType.SelectedPair;
+            return  INodeNoodleLabelActiveType.Selected;
         }
     }
 }
