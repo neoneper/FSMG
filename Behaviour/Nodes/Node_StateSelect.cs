@@ -7,15 +7,14 @@ using XNode;
 namespace XNode.FSMG
 {
 
-    [CreateNodeMenu("States/Loop")]
-    public class Node_StateLoop : NodeBase_State
+    [CreateNodeMenu("States/Select")]
+    public class Node_StateSelect : NodeBase_State
     {
         private NodePort InStatePort { get { return GetInputPort("inStates"); } }
         private NodePort InActionsPort { get { return GetInputPort("inActions"); } }
         private NodePort InDecisionsPort { get { return GetInputPort("inDecisions"); } }
-        private NodePort OutStatePort { get { return GetOutputPort("outState"); } }
-        //usado somente para renomear o nó assim que é criado, para evitar o nome feio vindo do arquivo.cs
-        private bool isAlreadyRename = false;
+        private NodePort OutStateTruePort { get { return GetOutputPort("outStateTrue"); } }
+        private NodePort OutStateFalsePort { get { return GetOutputPort("outStateFalse"); } }
 
         [Input(typeConstraint = TypeConstraint.Strict, backingValue = ShowBackingValue.Never)]
         public NodeBase_State inStates;
@@ -23,38 +22,38 @@ namespace XNode.FSMG
         public NodeBase_Action inActions;
         [Input(typeConstraint = TypeConstraint.Strict, backingValue = ShowBackingValue.Never)]
         public NodeBase_Decision inDecisions;
+
         [Output(typeConstraint = TypeConstraint.Strict, connectionType = ConnectionType.Override, backingValue = ShowBackingValue.Never)]
-        public NodeBase_State outState;
+        public NodeBase_State outStateTrue;
+        [Output(typeConstraint = TypeConstraint.Strict, connectionType = ConnectionType.Override, backingValue = ShowBackingValue.Never)]
+        public NodeBase_State outStateFalse;
 
-        protected override void Init()
-        {
-            //Renomeia o nó na primeira vez que o nó é iniciado, isto previne o nome feio original do .cs
-            if (!isAlreadyRename)
-                this.name = "Loop";
-
-            isAlreadyRename = true;
-
-            base.Init();
-        }
         public override void Execute(FSMBehaviour fsm)
         {
             //Executa ações
             ExecuteActions(fsm);
             //Executa decisões e muda de estado
             bool decisionResult = ExecuteDecisions(fsm);
+
             GoToNextState(decisionResult);
+
         }
 
         private void GoToNextState(bool decisionResult)
         {
-            if (decisionResult == false)
-                return;
 
-            NodeBase_State nextState = GetNextState();
-            if (nextState == null)
-                return;
-
-            nextState.SetCurrentState();
+            if (decisionResult)
+            {
+                NodeBase_State nextTrueState = GetNextTrueState();
+                if (nextTrueState)
+                    nextTrueState.SetCurrentState();
+            }
+            else
+            {                
+                NodeBase_State nextFalseState = GetNextFalseState();
+                if (nextFalseState)
+                    nextFalseState.SetCurrentState();
+            }
 
         }
         private void ExecuteActions(FSMBehaviour fsm)
@@ -71,20 +70,35 @@ namespace XNode.FSMG
         private bool ExecuteDecisions(FSMBehaviour fsm)
         {
             List<NodeBase_Decision> decisions = GetDecisions();
+
             return !decisions.Exists(r => r.Execute(fsm) == false);
         }
-        private NodeBase_State GetNextState()
+        private NodeBase_State GetNextTrueState()
         {
             NodeBase_State result = null;
-            NodePort outStatePort = OutStatePort;
-            if (outStatePort.ConnectionCount == 0)
+            NodePort outStateTruePort = OutStateTruePort;
+
+            if (outStateTruePort.ConnectionCount == 0)
                 return result;
 
-            result = (NodeBase_State)outStatePort.Connection.node;
+            result = (NodeBase_State)outStateTruePort.Connection.node;
 
             return result;
 
         }
+        private NodeBase_State GetNextFalseState()
+        {
+            NodeBase_State result = null;
+            NodePort outStateFalsePort = OutStateFalsePort;
+            if (outStateFalsePort.ConnectionCount == 0)
+                return result;
+
+            result = (NodeBase_State)outStateFalsePort.Connection.node;
+
+            return result;
+
+        }
+
         private List<NodeBase_Action> GetActions()
         {
             List<NodeBase_Action> actions = new List<NodeBase_Action>();

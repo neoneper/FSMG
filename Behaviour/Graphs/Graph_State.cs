@@ -334,7 +334,7 @@ namespace XNode.FSMG
             {
                 if (nodes.Exists(r => r.GetType() == typeof(Node_StateRoot)))
                 {
-                    return base.AddNode(typeof(Node_StateLoop));
+                    return base.AddNode(typeof(Node_StateTransition));
                 }
             }
 

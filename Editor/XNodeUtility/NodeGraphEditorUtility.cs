@@ -97,7 +97,7 @@ namespace XNodeEditor
                     break;
                 case NoodlePath.Straight:
                 case NoodlePath.Angled:
-
+                case NoodlePath.ShaderLab:
 
                     if (length > 2)
                     {
