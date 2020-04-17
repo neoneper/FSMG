@@ -16,76 +16,88 @@ namespace XNodeEditor
         /// <param name="window">window of the NodeGraph</param>
         public static void DrawNoodleLabels(NodeEditorWindow window)
         {
-            NodeGraph target = window.graph;
-            List<Vector2> gridPoints = new List<Vector2>(2);
-            Object selectedObject = Selection.activeObject;
-
-            foreach (XNode.Node node in target.nodes)
+            try
             {
-                //If a null node is found, return. This can happen if the nodes associated script is deleted. It is currently not possible in Unity to delete a null asset.
-                if (node == null) continue;
+                if (window == null)
+                    return;
 
-                if (node is INodeNoodleLabel == false) continue;
+                NodeGraph target = window.graph;
+                List<Vector2> gridPoints = new List<Vector2>(2);
+                Object selectedObject = Selection.activeObject;
 
-                if (AllowShowLabe(node) == false) continue;
-
-                // Draw full connections and output > reroute
-                foreach (XNode.NodePort output in node.Outputs)
+                foreach (XNode.Node node in target.nodes)
                 {
-                    //Needs cleanup. Null checks are ugly
-                    Rect fromRect;
-                    if (!window.portConnectionPoints.TryGetValue(output, out fromRect)) continue;
+                    //If a null node is found, return. This can happen if the nodes associated script is deleted. It is currently not possible in Unity to delete a null asset.
+                    if (node == null) continue;
 
-                    for (int k = 0; k < output.ConnectionCount; k++)
+                    if (node is INodeNoodleLabel == false) continue;
+
+                    if (AllowShowLabe(node) == false) continue;
+
+                    // Draw full connections and output > reroute
+                    foreach (XNode.NodePort output in node.Outputs)
                     {
-                        XNode.NodePort input = output.GetConnection(k);
+                        //Needs cleanup. Null checks are ugly
+                        Rect fromRect;
+                        if (!window.portConnectionPoints.TryGetValue(output, out fromRect)) continue;
 
-                        // Error handling
-                        if (input == null) continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
-                        //if (!input.IsConnectedTo(output)) input.Connect(output);
-                        Rect toRect;
-                        if (!window.portConnectionPoints.TryGetValue(input, out toRect)) continue;
+                        for (int k = 0; k < output.ConnectionCount; k++)
+                        {
+                            XNode.NodePort input = output.GetConnection(k);
 
-                        List<Vector2> reroutePoints = output.GetReroutePoints(k);
+                            // Error handling
+                            if (input == null) continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
+                                                         //if (!input.IsConnectedTo(output)) input.Connect(output);
+                            Rect toRect;
+                            if (!window.portConnectionPoints.TryGetValue(input, out toRect)) continue;
 
-                        gridPoints.Clear();
-                        gridPoints.Add(fromRect.center);
-                        gridPoints.AddRange(reroutePoints);
-                        gridPoints.Add(toRect.center);
-                        DrawNoodleLabesPositions(gridPoints, node, input);
+                            List<Vector2> reroutePoints = output.GetReroutePoints(k);
+
+                            gridPoints.Clear();
+                            gridPoints.Add(fromRect.center);
+                            gridPoints.AddRange(reroutePoints);
+                            gridPoints.Add(toRect.center);
+                            DrawNoodleLabesPositions(gridPoints, node, input);
 
 
+                        }
+                    }
+
+                    foreach (XNode.NodePort input in node.Inputs)
+                    {
+                        //Needs cleanup. Null checks are ugly
+                        Rect fromRect;
+                        if (!window.portConnectionPoints.TryGetValue(input, out fromRect)) continue;
+
+                        for (int k = 0; k < input.ConnectionCount; k++)
+                        {
+                            XNode.NodePort output = input.GetConnection(k);
+
+                            // Error handling
+                            if (output == null) continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
+
+
+                            //if (!input.IsConnectedTo(output)) input.Connect(output);
+                            Rect toRect;
+                            if (!window.portConnectionPoints.TryGetValue(output, out toRect)) continue;
+
+                            List<Vector2> reroutePoints = output.GetReroutePoints(k);
+
+                            gridPoints.Clear();
+                            gridPoints.Add(fromRect.center);
+                            gridPoints.AddRange(reroutePoints);
+                            gridPoints.Add(toRect.center);
+
+                            DrawNoodleLabesPositions(gridPoints, node, output);
+
+
+                        }
                     }
                 }
+            }
+            catch
+            {
 
-                foreach (XNode.NodePort input in node.Inputs)
-                {
-                    //Needs cleanup. Null checks are ugly
-                    Rect fromRect;
-                    if (!window.portConnectionPoints.TryGetValue(input, out fromRect)) continue;
-
-                    for (int k = 0; k < input.ConnectionCount; k++)
-                    {
-                        XNode.NodePort output = input.GetConnection(k);
-
-                        // Error handling
-                        if (output == null) continue; //If a script has been updated and the port doesn't exist, it is removed and null is returned. If this happens, return.
-                        //if (!input.IsConnectedTo(output)) input.Connect(output);
-                        Rect toRect;
-                        if (!window.portConnectionPoints.TryGetValue(output, out toRect)) continue;
-
-                        List<Vector2> reroutePoints = output.GetReroutePoints(k);
-
-                        gridPoints.Clear();
-                        gridPoints.Add(fromRect.center);
-                        gridPoints.AddRange(reroutePoints);
-                        gridPoints.Add(toRect.center);
-
-                        DrawNoodleLabesPositions(gridPoints, node, output);
-
-
-                    }
-                }
             }
         }
 
