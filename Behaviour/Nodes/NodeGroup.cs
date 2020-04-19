@@ -8,6 +8,7 @@ namespace XNode.FSMG {
 	public class NodeGroup : Node {
 		public int width = 400;
 		public int height = 400;
+        public bool locked = false;
 		public Color color = new Color(1f, 1f, 1f, 0.1f);
 
 		public override object GetValue(NodePort port) {
