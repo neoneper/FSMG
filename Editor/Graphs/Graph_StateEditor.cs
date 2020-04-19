@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -51,12 +52,32 @@ namespace XNodeEditor.FSMG
 
         public override void OnCreate()
         {
+            // Undo.ClearAll();
+
             if (graph == null)
                 graph = (Graph_State)target;
 
             graph.SetSettings(FSMGSettingsPreferences.GetOrCreateSettings());
 
+
             base.OnCreate();
+
+            //   Undo.RecordObject(graph, "OnCreate");
+
+        }
+
+        public override Node CreateNode(Type type, Vector2 position)
+        {
+            Node node = base.CreateNode(type, position);
+
+            // Undo.RecordObject(graph, "CreateNode");
+            //Undo.RegisterCompleteObjectUndo(graph, "CreateNode");
+            return node;
+        }
+
+        public override void RemoveNode(Node node)
+        {
+            base.RemoveNode(node);
         }
     }
 
@@ -69,7 +90,7 @@ namespace XNodeEditor.FSMG
         private string new_varErrorMsg = "";
         private string new_varName = FSMGUtility.StringTag_Undefined;
         private GraphVarType new_varType = GraphVarType.Integer;
-        
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -148,6 +169,8 @@ namespace XNodeEditor.FSMG
             new_varType = GraphVarType.Integer;
             show_newVarPanel = openNewVarPanel;
         }
+
+
     }
 
 }

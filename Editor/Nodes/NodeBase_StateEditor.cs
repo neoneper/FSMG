@@ -13,16 +13,14 @@ namespace XNodeEditor.FSMG
         NodeBase_State node;
         Graph_State graph;
         GUIContent favoriteIcon;
-
-        public override void OnCreate()
-        {
-            favoriteIcon = GetFavoriteIcon();
-            node = target as NodeBase_State;
-            graph = node.graph as Graph_State;
-            base.OnCreate();
-        }
+       
         public override void OnHeaderGUI()
         {
+            if (favoriteIcon == null)
+                favoriteIcon = GetFavoriteIcon();
+
+            node = target as NodeBase_State;
+            graph = node.graph as Graph_State;
             DrawOnHeaderGUI(graph, node, favoriteIcon);
 
         }
@@ -51,7 +49,6 @@ namespace XNodeEditor.FSMG
         {
             return EditorGUIUtility.IconContent("Favorite", "Is Root Node");
         }
-
 
 
     }

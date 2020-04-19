@@ -7,8 +7,8 @@ using UnityEngine.AI;
 
 namespace XNode.FSMG
 {
-    [CreateNodeMenu("Decisions/Select")]
-    public class Node_Decision_Select : NodeBase_Decision
+    [CreateNodeMenu("Decisions/Case")]
+    public class Node_Decision_Case : NodeBase_Decision
     {
         public class DynamicDecision
         {
