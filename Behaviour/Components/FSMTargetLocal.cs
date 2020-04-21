@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace XNode.FSMG.Components
 {
-    [AddComponentMenu("FSMG/TargetLocal")]
+    [AddComponentMenu("FSM/TargetLocal")]
     public class FSMTargetLocal : FSMTargetBehaviour
     {
         [SerializeField, GraphState]
-        private Graph_State graph;
+        private Graph_State graph=null;
 
         [SerializeField, FSMTargets(useOwnList: true, getListFunction: "GetLocalTargets")]
         private string target = UndefinedTag;

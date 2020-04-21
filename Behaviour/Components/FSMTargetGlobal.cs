@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace XNode.FSMG.Components
 {
-    [AddComponentMenu("FSMG/TargetGlobal")]
+    [AddComponentMenu("FSM/TargetGlobal")]
     public class FSMTargetGlobal : FSMTargetBehaviour
     {
         [SerializeField, FSMTargets]
