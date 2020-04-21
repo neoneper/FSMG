@@ -3,7 +3,7 @@ https://www.youtube.com/watch?v=WlDU9wm8t6c&t=28s
 
 Doc: https://github.com/neoneper/FSMG/wiki
 
-Discord: https://discord.gg/pG9X7q
+Discord: https://discord.gg/GV5mA3t
 
 Examples: https://github.com/neoneper/FSMGExamples
 
