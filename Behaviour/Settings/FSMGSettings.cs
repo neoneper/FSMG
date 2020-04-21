@@ -9,8 +9,8 @@ using XNode.FSMG;
 namespace XNode.FSMG
 {
     public class FSMGSettings : ScriptableObject
-    {      
-
+    {
+        
         [SerializeField]
         private TargetListGlobal targets = null;
         [SerializeField]

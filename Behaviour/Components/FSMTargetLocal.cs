@@ -1,0 +1,32 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace XNode.FSMG.Components
+{
+    [AddComponentMenu("FSMG/TargetLocal")]
+    public class FSMTargetLocal : FSMTargetBehaviour
+    {
+        [SerializeField, GraphState]
+        private Graph_State graph;
+
+        [SerializeField, FSMTargets(useOwnList: true, getListFunction: "GetLocalTargets")]
+        private string target = UndefinedTag;
+
+        public override string targetName
+        {
+            get
+            {
+                return target;
+            }
+        }
+
+        protected List<string> GetLocalTargets()
+        {
+            if (graph != null)
+                return graph.GetLocalTargetsName();
+            else
+                return new List<string>(0);
+        }
+    }
+}

@@ -19,7 +19,7 @@ namespace XNode.FSMG
         private string targetName = "";
 
         [Output]
-        public FSMTarget outTarget;
+        public FSMTargetBehaviour outTarget;
 
         protected List<string> GetTargetsName()
         {
@@ -33,7 +33,7 @@ namespace XNode.FSMG
 
 
 
-        private FSMTarget GetTarget()
+        private FSMTargetBehaviour GetTarget()
         {
             if (string.IsNullOrEmpty(targetName) || targetName.Equals(FSMGUtility.StringTag_Undefined))
                 return null;
@@ -41,7 +41,7 @@ namespace XNode.FSMG
             if (Application.isEditor && Application.isPlaying == false)
                 return null;
 
-            FSMTarget result = null;
+            FSMTargetBehaviour result = null;
 
             ((Graph_State)graph).TryGetTarget(targetName, out result, localType);
 

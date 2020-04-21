@@ -119,7 +119,6 @@ namespace XNodeEditor.FSMG
         {
             FSMGSettings settings = null;
 
-
             if (AssetDatabase.IsValidFolder("Assets/Editor") == false)
                 AssetDatabase.CreateFolder("Assets", "Editor");
             if (AssetDatabase.IsValidFolder("Assets/Editor/FSMGSettings") == false)

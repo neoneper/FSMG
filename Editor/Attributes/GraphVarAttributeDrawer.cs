@@ -40,7 +40,7 @@ namespace XNodeEditor.FSMG
             string currentValue = property.stringValue;
             if (string.IsNullOrEmpty(currentValue))
             {
-                property.stringValue = FSMTarget.UndefinedTag;
+                property.stringValue = FSMTargetBehaviour.UndefinedTag;
                 currentValue = property.stringValue;
             }
 
@@ -71,7 +71,7 @@ namespace XNodeEditor.FSMG
             object target = PropertyUtility.GetTargetObjectWithProperty(property);
 
             object valuesObject = GetValues(property, attr.ValuesName);
-            menu.AddItem(new GUIContent(FSMTarget.UndefinedTag), false, () => SelectMatInfo(property, FSMTarget.UndefinedTag, target));
+            menu.AddItem(new GUIContent(FSMTargetBehaviour.UndefinedTag), false, () => SelectMatInfo(property, FSMTargetBehaviour.UndefinedTag, target));
 
 
 

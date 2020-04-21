@@ -32,6 +32,7 @@ namespace XNode.FSMG
         {
             get { return currentState_elapsedTime; }
         }
+        public FSMGSettings Settings { get { return settings; } }
 
         /// <summary>
         /// Atual nó de estados que será atualizado pelo <seealso cref="FSMBehaviour"/>
@@ -203,7 +204,7 @@ namespace XNode.FSMG
 
             return result;
         }
-        public bool TryGetTarget(string targetName, out FSMTarget fsmTarget, TargetLocalType localType)
+        public bool TryGetTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
         {
             return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTarget, localType);
         }

@@ -105,8 +105,8 @@ namespace XNodeEditor.FSMG
                     // Move to bottom
                     if (target.graph.nodes.IndexOf(target) != 0)
                     {
-                        target.graph.nodes.Remove(target);
-                        target.graph.nodes.Insert(0, target);
+                        //target.graph.nodes.Remove(target);
+                        //target.graph.nodes.Insert(0, target);
                     }
                     // Add scale cursors
                     if (NodeEditorWindow.current.nodeSizes.TryGetValue(target, out size))

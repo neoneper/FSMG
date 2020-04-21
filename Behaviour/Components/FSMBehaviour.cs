@@ -15,7 +15,7 @@ namespace XNode.FSMG.Components
     {
         private bool isGraphInstantied = false;
 
-        private List<FSMTarget> _globalTargets = null;
+        private List<FSMTargetBehaviour> _globalTargets = null;
 
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
@@ -53,7 +53,7 @@ namespace XNode.FSMG.Components
             }
         }
 
-        public List<FSMTarget> globalTargets
+        public List<FSMTargetBehaviour> globalTargets
         {
             get
             {
@@ -61,11 +61,11 @@ namespace XNode.FSMG.Components
                 //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
                 if (_globalTargets == null)
                 {
-                    _globalTargets = FindObjectsOfType<FSMTarget>().ToList();
+                    _globalTargets = FindObjectsOfType<FSMTargetBehaviour>().ToList();
                     _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
                 }
 
-                return new List<FSMTarget>(_globalTargets);
+                return new List<FSMTargetBehaviour>(_globalTargets);
 
             }
         }
@@ -182,7 +182,7 @@ namespace XNode.FSMG.Components
 
         }
 
-        public bool TryGetFSMTarget(string targetName, out FSMTarget fsmTarget, TargetLocalType localType)
+        public bool TryGetFSMTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
         {
 
             switch (localType)

@@ -17,7 +17,7 @@ namespace XNode.FSMG
     public class TargetLocal
     {
         public TargetType targetType;
-        public FSMTarget fsmTarget;
+        public FSMTargetBehaviour fsmTarget;
 
         public override string ToString()
         {
