@@ -27,7 +27,7 @@ namespace XNode.FSMG
 
         public virtual T GetVariableValue()
         {
-            dynamic result = default(T);
+            T result = default(T);
             Graph_State graphState = (Graph_State)graph;
 
             if (string.IsNullOrEmpty(variableName) || variableName == FSMGUtility.StringTag_Undefined)
@@ -40,19 +40,19 @@ namespace XNode.FSMG
             {
                 case GraphVarType.Boolean:
                     BoolVar boolVar = null;
-                    if (graphState.TryGetBoolVar(variableName, out boolVar, localType)) { result = boolVar.value; }
+                    if (graphState.TryGetBoolVar(variableName, out boolVar, localType)) { result = (T)Convert.ChangeType(boolVar.value,typeof(T)); }
                     break;
                 case GraphVarType.Double:
                     DoubleVar doubleVar = null;
-                    if (graphState.TryGetDoubeVar(variableName, out doubleVar, localType)) { result = doubleVar.value; }
+                    if (graphState.TryGetDoubeVar(variableName, out doubleVar, localType)) { result = (T)Convert.ChangeType(doubleVar.value,typeof(T)); }
                     break;
                 case GraphVarType.Float:
                     FloatVar floatVar = null;
-                    if (graphState.TryGetFloatVar(variableName, out floatVar, localType)) { result = floatVar.value; }
+                    if (graphState.TryGetFloatVar(variableName, out floatVar, localType)) { result = (T)Convert.ChangeType(floatVar.value,typeof(T)); }
                     break;
                 case GraphVarType.Integer:
                     IntVar intVar = null;
-                    if (graphState.TryGetIntVar(variableName, out intVar, localType)) { result = intVar.value; }
+                    if (graphState.TryGetIntVar(variableName, out intVar, localType)) { result = (T)Convert.ChangeType(intVar.value,typeof(T)); }
                     break;
             }
 
