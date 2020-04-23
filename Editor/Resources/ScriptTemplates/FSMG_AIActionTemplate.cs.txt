@@ -1,0 +1,18 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using XNode.FSMG;
+using XNode.FSMG.Components;
+
+namespace XNode.FSMG
+{
+    [CreateAssetMenu(menuName = "FSMG/AI/MyCustomAgent/Actions/#SCRIPTNAME#", fileName = "New_#SCRIPTNAME#.asset")]
+	public class #SCRIPTNAME# : AI_ActionBase
+    {
+        public override void Execute(FSMBehaviour fsm)
+        {
+            //Logic ai here!
+			#NOTRIM#
+        }
+    }
+}

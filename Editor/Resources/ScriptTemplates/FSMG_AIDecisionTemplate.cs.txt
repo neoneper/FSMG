@@ -1,0 +1,17 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using XNode.FSMG;
+using XNode.FSMG.Components;
+
+namespace XNode.FSMG
+{
+    [CreateAssetMenu(menuName = "FSMG/AI/MyCustomAgent/Decisions/#SCRIPTNAME#", fileName = "New_#SCRIPTNAME#.asset")]
+	public class #SCRIPTNAME# : AI_DecisionBase
+	{    
+		public override bool Execute(FSMBehaviour fsm)
+		{
+			 return false; //Replace this
+		}
+	}
+}

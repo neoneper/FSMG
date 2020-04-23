@@ -3,9 +3,12 @@
   "displayName": "FSMG",
   "version": "0.0.1",
   "unity": "2019.3",
-  "description": "Finite State Machine Graph",
-  "keywords": [ "fsm", "fsmg", "ia" ],
+  "description": "FSMG (Finite State Machine Graph), is a framework for node-based behavior trees, designed to work as a finite state machine.",
+  "keywords": [
+    "fsm",
+    "fsmg",
+    "ia"
+  ],
   "category": "tools",
-  "dependencies": {
-  }
+  "dependencies": {}
 }

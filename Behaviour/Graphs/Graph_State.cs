@@ -277,8 +277,6 @@ namespace XNode.FSMG
 
         }
 
-
-
         public void SetSettings(FSMGSettings settings)
         {
             this.settings = settings;
@@ -301,10 +299,11 @@ namespace XNode.FSMG
 
             return result;
         }
-
+        
         public override NodeGraph Copy()
         {
             Graph_State cp = (Graph_State)base.Copy();
+            
             int indexOfRoot = nodes.IndexOf(RootState);
             int indexOfCurrent = nodes.IndexOf(CurrentState);
 
