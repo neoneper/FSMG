@@ -9,10 +9,11 @@ Examples: https://github.com/neoneper/FSMGExamples
 
 ###Visão Geral:
 Segue abeixo algumas informações úteis sobre o FSMG. Se você não entende o que é ou como o FSMG pode te ajudar, aconselho que continue a leitura.
-
+ 
  - FSMG (Finite State Machine Graph), é uma framework para árvores de comportamento baseadas em nós, destinada a trabalhar como máquina de estado finita. 
  - FSMG não é uma ferramenta de visual scripting, muito menos um processador de script em tempo real.
  - FSMG não é destinada a um tipo especifico de jogo e por padrão não vem com nenhum jogo pronto. Para exemplos de uso do FSMG acesse o repositório de exemplos.
+ - Suportado por .Net2x e 4X
  - FSMG foi projetado utilizando o framework XNODE.
  - Nao há necessidade de conhecimento prévio do XNODE para utilizar o FSMG. 
  - FSMG não segue um padrão UML de fluxo. Ele foi projetado para ser compacto e eficiênte.
