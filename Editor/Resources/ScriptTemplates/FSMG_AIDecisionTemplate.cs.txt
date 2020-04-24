@@ -4,8 +4,7 @@ using UnityEngine;
 using XNode.FSMG;
 using XNode.FSMG.Components;
 
-namespace XNode.FSMG
-{
+
     [CreateAssetMenu(menuName = "FSMG/AI/MyCustomAgent/Decisions/#SCRIPTNAME#", fileName = "New_#SCRIPTNAME#.asset")]
 	public class #SCRIPTNAME# : AI_DecisionBase
 	{    
@@ -14,4 +13,3 @@ namespace XNode.FSMG
 			 return false; //Replace this
 		}
 	}
-}
