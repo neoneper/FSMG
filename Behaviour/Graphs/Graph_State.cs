@@ -281,16 +281,16 @@ namespace XNode.FSMG
         {
             this.settings = settings;
         }
-        public GraphAddVarErrorsType AddTagVariable(string varName, GraphVarType varType)
+        public GraphVarAddErrorsType AddTagVariable(string varName, GraphVarType varType)
         {
-            GraphAddVarErrorsType result = GraphAddVarErrorsType.none;
+            GraphVarAddErrorsType result = GraphVarAddErrorsType.none;
 
             if (varName == FSMGUtility.StringTag_Undefined)
-                return GraphAddVarErrorsType.invalidName;
+                return GraphVarAddErrorsType.invalidName;
 
             if (variables.ContainsKey(varName) == true)
             {
-                result = GraphAddVarErrorsType.graph_already_exists;
+                result = GraphVarAddErrorsType.graph_already_exists;
             }
             else
             {

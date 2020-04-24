@@ -14,13 +14,15 @@ namespace XNode.FSMG.Components
     /// </summary>
     public abstract class FSMBehaviour : MonoBehaviour
     {
+        //Utilizado em runtime quando o componente é iniciado pela primeira vez.
+        //Quando falso o componente irá criar uma instancia do gráfico original para trabalhar.
+        //Uma vez criado a instancia esta variavel se torna verdadeira e impede novas instancais.
         private bool isGraphInstantied = false;
-
-        private List<FSMTargetBehaviour> _globalTargets = null;
-
+        //Lista de trajetos globais já instanciados no mundo.
+        //ésta lista será populada somente uma vez, quando requisitado pelo seu metodo publico GET,
+        private List<FSMTargetGlobal> _globalTargets = null;
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
-
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
         private TargetListLocal targets = null;
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
@@ -31,7 +33,6 @@ namespace XNode.FSMG.Components
         private DoubleVarList doubleVars = null;
         [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
         private BoolVarList boolVars = null;
-
         private bool readyToWork = false;
         /// <summary>
         /// Utilzie esta váriavel para fazer com que ações e decisões e outros componentes
@@ -42,7 +43,6 @@ namespace XNode.FSMG.Components
             get { return readyToWork; }
             set { readyToWork = value; }
         }
-
         /// <summary>
         /// Gráfico de estados ao qual este componente pertence. 
         /// Controladores FSM podem trabalhar apenas com um gráfico.
@@ -61,8 +61,10 @@ namespace XNode.FSMG.Components
                 return _graph;
             }
         }
-
-        public List<FSMTargetBehaviour> globalTargets
+        /// <summary>
+        /// Uma Lista de trajetos globais já instanciados no mundo.
+        /// </summary>
+        public List<FSMTargetGlobal> globalTargets
         {
             get
             {
@@ -70,52 +72,85 @@ namespace XNode.FSMG.Components
                 //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
                 if (_globalTargets == null)
                 {
-                    _globalTargets = FindObjectsOfType<FSMTargetBehaviour>().ToList();
+                    _globalTargets = FindObjectsOfType<FSMTargetGlobal>().ToList();
                     _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
                 }
 
-                return new List<FSMTargetBehaviour>(_globalTargets);
+                return new List<FSMTargetGlobal>(_globalTargets);
 
             }
         }
+        /// <summary>
+        /// Procura e retorna em caso de sucesso uma variavel de gráfico do tipo <see cref="IntVar"/>
+        /// </summary>
+        /// <param name="variable">Nome da variavel</param>
+        /// <param name="intVar">Se encontrado o objeto resultante <see cref="IntVar"/> será alocado nele.</param>
+        /// <returns>Verdadeiro se encontrado, falso se não encontrado</returns>
         public bool TryGetIntValue(string variable, out IntVar intVar)
         {
             return intVars.TryGetValue(variable, out intVar);
         }
+        /// <summary>
+        /// Procura e retorna em caso de sucesso uma variavel de gráfico do tipo <see cref="FloatVar"/>
+        /// </summary>
+        /// <param name="variable">Nome da variavel</param>
+        /// <param name="floatVar">Se encontrado o objeto resultante <see cref="FloatVar"/> será alocado nele.</param>
+        /// <returns>Verdadeiro se encontrado, falso se não encontrado</returns>
         public bool TryGetFloatValue(string variable, out FloatVar floatVar)
         {
             return floatVars.TryGetValue(variable, out floatVar);
         }
+        /// <summary>
+        /// Procura e retorna em caso de sucesso uma variavel de gráfico do tipo <see cref="DoubleVar"/>
+        /// </summary>
+        /// <param name="variable">Nome da variavel</param>
+        /// <param name="doubleVar">Se encontrado o objeto resultante <see cref="DoubleVar"/> será alocado nele.</param>
+        /// <returns>Verdadeiro se encontrado, falso se não encontrado</returns>
         public bool TryGetDoubeValue(string variable, out DoubleVar doubleVar)
         {
             return doubleVars.TryGetValue(variable, out doubleVar);
         }
+        /// <summary>
+        /// Procura e retorna em caso de sucesso uma variavel de gráfico do tipo <see cref="BoolVar"/>
+        /// </summary>
+        /// <param name="variable">Nome da variavel</param>
+        /// <param name="boolVar">Se encontrado o objeto resultante <see cref="BoolVar"/> será alocado nele.</param>
+        /// <returns>Verdadeiro se encontrado, falso se não encontrado</returns>
         public bool TryGetBooleanValue(string variable, out BoolVar boolVar)
         {
             return boolVars.TryGetValue(variable, out boolVar);
         }
-
-        public GraphAddVarErrorsType AddVariable(string varName, GraphVarType varType)
+        /// <summary>
+        /// Adiciona uma variavel ao gráfico caso éla ainda não exista.
+        /// Tenha em mente que esta variavel sera adicionada ao gráfico ao qual este componente pertence,
+        /// isto significa que todos os FSM que utilizem este mesmo gráfico também terão sua própria versão 
+        /// desta variavel. Caso você remova utizando <seealso cref="RemoveVariable(string, GraphVarType)"/>
+        /// todos os componentes <seealso cref="FSMBehaviour"/> ficarão sem ela.
+        /// </summary>
+        /// <param name="varName">Nome da variavel</param>
+        /// <param name="varType">Tipo da variavel</param>
+        /// <returns><see cref="GraphVarAddErrorsType.none"/> caso seja armazenada com sucesso. </returns>
+        public GraphVarAddErrorsType AddVariable(string varName, GraphVarType varType)
         {
-            GraphAddVarErrorsType result = GraphAddVarErrorsType.none;
+            GraphVarAddErrorsType result = GraphVarAddErrorsType.none;
 
             if (varName == FSMGUtility.StringTag_Undefined)
             {
-                result = GraphAddVarErrorsType.invalidName;
+                result = GraphVarAddErrorsType.invalidName;
                 return result;
             }
 
             //Primeiro verifico se a variavel ja nao esta presente no COmponente.
             if (CheckIfVarExist(varName))
             {
-                result = GraphAddVarErrorsType.fsm_already_exists;
+                result = GraphVarAddErrorsType.fsm_already_exists;
                 return result;
             }
 
             //Depois verifico se a variavel já esta marcada nó gráfico
             result = graph.AddTagVariable(varName, varType);
 
-            if (result != GraphAddVarErrorsType.none) return result;
+            if (result != GraphVarAddErrorsType.none) return result;
 
 
             switch (varType)
@@ -138,6 +173,13 @@ namespace XNode.FSMG.Components
 
             return result;
         }
+        /// <summary>
+        /// Remove variavel do gráfico.
+        /// Tenha em mente que todos os <see cref="FSMBehaviour"/> que utilizam este gráfico também ficarão
+        /// sem esta variável.
+        /// </summary>
+        /// <param name="varName">Nome da variavel</param>
+        /// <param name="varType">Tipo da variavel</param>
         public void RemoveVariable(string varName, GraphVarType varType)
         {
             switch (varType)
@@ -159,6 +201,11 @@ namespace XNode.FSMG.Components
             }
 
         }
+        /// <summary>
+        /// Verifica se a variavel existe no gráfico.
+        /// </summary>
+        /// <param name="varName">Nome da variavel a ser pesquiasda</param>
+        /// <returns>falso se não encontrada, verdadeiro se encontrado</returns>       
         public bool CheckIfVarExist(string varName)
         {
             bool result = false;
@@ -174,6 +221,11 @@ namespace XNode.FSMG.Components
 
             return result;
         }
+        /// <summary>
+        /// Dicionário de lista reordenável contendo todas as variaveis do gráfico criadas ate o momento em formato
+        /// <seealso cref="TagVar"/>
+        /// </summary>
+        /// <returns><seealso cref="TagVarList"/> contendo todas as variaveis do gráfico em formato <seealso cref="TagVar"/></returns>
         public TagVarList GetVariablesAsTag()
         {
             TagVarList tagVariables = new TagVarList();
@@ -189,6 +241,15 @@ namespace XNode.FSMG.Components
             return tagVariables;
 
         }
+        /// <summary>
+        /// Procura 
+        /// </summary>
+        /// <param name="targetName">Nome do trajeto a ser procurado</param>
+        /// <param name="fsmTarget">variavel para alocação, se encontrado</param>
+        /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
+        /// ou se é global <see cref="FSMTargetGlobal"/>
+        /// </param>
+        /// <returns>Verdadeiro se encontrado</returns>
         public bool TryGetFSMTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
         {
 
@@ -218,7 +279,6 @@ namespace XNode.FSMG.Components
 
             return fsmTarget != null;
         }
-
         /// <summary>
         /// Sincroniza as variaveis e trajetos do componente com as variaveis do gráfico de estados
         /// </summary>
@@ -285,7 +345,6 @@ namespace XNode.FSMG.Components
 
             return (graph.CurrentStateElapsedTime >= duration);
         }
-
         /// <summary>
         /// Chamado somente em modo editor sempre que o gráfico é modificado para este componente.
         /// Tenha emmente que ao modificar o grafico as variaveis origem são perdidas e subistituidas pelas variaveis
@@ -306,7 +365,6 @@ namespace XNode.FSMG.Components
 
             SyncVariablesAndTargets();
         }
-
         /// <summary>
         /// Apaga todos os valores contidos nas variaveis de gráfico. Int, Float, Double e Bool e também trajetos
         /// </summary>

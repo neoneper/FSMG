@@ -5,6 +5,9 @@ using XNode.FSMG.SerializableDictionary;
 
 namespace XNode.FSMG
 {
+    /// <summary>
+    /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="int"/>.
+    /// </summary>
     [Serializable]
     public class IntVar
     {
@@ -28,6 +31,9 @@ namespace XNode.FSMG
             return value.ToString();
         }
     }
+    /// <summary>
+    /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="float"/>
+    /// </summary>
     [Serializable]
     public class FloatVar
     {
@@ -52,6 +58,9 @@ namespace XNode.FSMG
             return value.ToString();
         }
     }
+    /// <summary>
+    /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="double"/>
+    /// </summary>
     [Serializable]
     public class DoubleVar
     {
@@ -74,6 +83,9 @@ namespace XNode.FSMG
             return value.ToString();
         }
     }
+    /// <summary>
+    /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="bool"/>
+    /// </summary>
     [Serializable]
     public class BoolVar
     {
@@ -88,7 +100,9 @@ namespace XNode.FSMG
             return value.ToString();
         }
     }
-
+    /// <summary>
+    /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar apenas o tipo de uma várivel <seealso cref="GraphVarType"/>
+    /// </summary>
     [Serializable]
     public class TagVar
     {
@@ -117,33 +131,41 @@ namespace XNode.FSMG
             return result;
         }
     }
-
+    /// <summary>
+    /// Um tipo de dicinário com sistema de reordenação para o tipo de variavel <seealso cref="IntVar"/>,
+    /// O Nome da variavel é a chave do dicionário.
+    /// </summary>
     [Serializable]
-    public class IntVarList : SerializableDictionaryBase<string, IntVar>
-    {
-
-    }
+    public class IntVarList : SerializableDictionaryBase<string, IntVar> { }
+    /// <summary>
+    /// Um tipo de dicinário com sistema de reordenação para o tipo de variavel <seealso cref="FloatVar"/>,
+    /// O Nome da variavel é a chave do dicionário.
+    /// </summary>
     [Serializable]
-    public class FloatVarList : SerializableDictionaryBase<string, FloatVar>
-    {
-
-
-    }
+    public class FloatVarList : SerializableDictionaryBase<string, FloatVar> { }
+    /// <summary>
+    /// Um tipo de dicinário com sistema de reordenação para o tipo de variavel <seealso cref="DoubleVar"/>,
+    /// O Nome da variavel é a chave do dicionário.
+    /// </summary>
     [Serializable]
-    public class DoubleVarList : SerializableDictionaryBase<string, DoubleVar>
-    {
-
-    }
+    public class DoubleVarList : SerializableDictionaryBase<string, DoubleVar> { }
+    /// <summary>
+    /// Um tipo de dicinário com sistema de reordenação para o tipo de variavel <seealso cref="BoolVar"/>,
+    /// O Nome da variavel é a chave do dicionário.
+    /// </summary>
     [Serializable]
-    public class BoolVarList : SerializableDictionaryBase<string, BoolVar>
-    {
-
-    }
+    public class BoolVarList : SerializableDictionaryBase<string, BoolVar> { }
+    /// <summary>
+    /// Um tipo de dicinário com sistema de reordenação que guarda o nome de uma váriavel e seu tipo,
+    /// Utilizado para ajudar outros sistemas de procura a encontrar uma variavel diretamente em uma 
+    /// lista correspondente ao seu tipo. O Nome da variavel é a chave do dicionário.
+    /// </summary>
     [Serializable]
-    public class TagVarList : SerializableDictionaryBase<string, GraphVarType>
-    {
+    public class TagVarList : SerializableDictionaryBase<string, GraphVarType> { }
 
-    }
+    /// <summary>
+    /// Informa o tipo de uma variavel
+    /// </summary>
     [Serializable]
     public enum GraphVarType
     {
@@ -152,11 +174,19 @@ namespace XNode.FSMG
         Double,
         Boolean
     }
+    /// <summary>
+    /// Utilizado para informar se uma variavel esta sendo utilizada pelo sistema global de variaveis ou
+    /// por um gráfico, que neste caso podemos considerar LOCAL, pois apenas componentes que utilizam este gráfico poderão ter
+    /// acesso à esta variavel.
+    /// </summary>
     public enum GraphVarLocalType { Local, Global }
 
-
+    /// <summary>
+    /// Utilziado para informar qual o tipo de retorno alguma função teve na tentative de adicionar uma variavel a alguma lista.
+    /// Tenha em mente que o valor <seealso cref="GraphVarAddErrorsType.none"/>, significa que não houver erro algum!
+    /// </summary>
     [Serializable]
-    public enum GraphAddVarErrorsType
+    public enum GraphVarAddErrorsType
     {
         none,
         unknown,                //Desconhecido

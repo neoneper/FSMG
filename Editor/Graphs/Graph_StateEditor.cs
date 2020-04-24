@@ -136,9 +136,9 @@ namespace XNodeEditor.FSMG
                 //Create newVariable at fsm componnent and reply the tag at graph
                 if (GUILayout.Button("Create"))
                 {
-                    GraphAddVarErrorsType error = graph.AddTagVariable(new_varName, new_varType);
+                    GraphVarAddErrorsType error = graph.AddTagVariable(new_varName, new_varType);
 
-                    if (error != GraphAddVarErrorsType.none)
+                    if (error != GraphVarAddErrorsType.none)
                     {
                         show_defaultErrorPanel = true;
                         new_varErrorMsg = "Error: " + error.ToString();

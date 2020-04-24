@@ -70,11 +70,11 @@ namespace XNode.FSMG.Components
                 //Create newVariable at fsm componnent and reply the tag at graph
                 if (GUILayout.Button("Create"))
                 {
-                    GraphAddVarErrorsType error = fsmBehaviour.AddVariable(new_varName, new_varType);
+                    GraphVarAddErrorsType error = fsmBehaviour.AddVariable(new_varName, new_varType);
 
-                    if (error != GraphAddVarErrorsType.none)
+                    if (error != GraphVarAddErrorsType.none)
                     {
-                        if (error == GraphAddVarErrorsType.graph_already_exists)
+                        if (error == GraphVarAddErrorsType.graph_already_exists)
                             show_graphErrorPanel = true;
 
                         show_defaultErrorPanel = true;

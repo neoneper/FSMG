@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace XNode.FSMG
 {
+    /// <summary>
+    /// Base para criar todas as suas ações do tipo scriptableObject.
+    /// Elas serão executado dentro do nó <see cref="Node_ActionCustom"/>.
+    /// Este scriptableObject sera a ponte entre nosso FSM (<see cref="FSMBehaviour"/>)e o nosso grafico, <seealso cref="Graph_State"/>.
+    /// </summary>
     public abstract class AI_ActionBase : ScriptableObject
     {
         [SerializeField, GraphState(callback: "OnGraphChangeInEditor")]

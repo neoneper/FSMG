@@ -5,6 +5,11 @@ using XNode.FSMG.Components;
 
 namespace XNode.FSMG
 {
+    /// <summary>
+    /// Base para criar todas as suas decisões do tipo scriptableObject.
+    /// Elas serão executado dentro do nó <see cref="Node_DecisionCustom"/>.
+    /// Este scriptableObject sera a ponte entre nosso FSM (<see cref="FSMBehaviour"/>)e o nosso grafico, <seealso cref="Graph_State"/>.
+    /// </summary>
     public abstract class AI_DecisionBase : ScriptableObject
     {
         [SerializeField, GraphState(callback: "OnGraphChangeInEditor")]
