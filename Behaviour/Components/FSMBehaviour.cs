@@ -9,7 +9,8 @@ using XNode.FSMG.SerializableDictionary;
 namespace XNode.FSMG.Components
 {
     /// <summary>
-    /// Base component to create FSM components in behaviours
+    /// Base component to create FSM components in behaviours. 
+    /// Create their AI controllers (Agents), using this base.
     /// </summary>
     public abstract class FSMBehaviour : MonoBehaviour
     {
@@ -32,12 +33,21 @@ namespace XNode.FSMG.Components
         private BoolVarList boolVars = null;
 
         private bool readyToWork = false;
+        /// <summary>
+        /// Utilzie esta váriavel para fazer com que ações e decisões e outros componentes
+        /// saibam quando devem esperar para trabalhar.  
+        /// </summary>
         public bool isReady
         {
             get { return readyToWork; }
             set { readyToWork = value; }
         }
 
+        /// <summary>
+        /// Gráfico de estados ao qual este componente pertence. 
+        /// Controladores FSM podem trabalhar apenas com um gráfico.
+        /// Trocar o gráfico irá remover todas as variaveis e seus valores contidos no antigo gráfico.
+        /// </summary>
         public Graph_State graph
         {
             get
@@ -46,7 +56,6 @@ namespace XNode.FSMG.Components
                 {
                     _graph = _graph.Instance;
                     isGraphInstantied = true;
-
                 }
 
                 return _graph;
@@ -69,7 +78,6 @@ namespace XNode.FSMG.Components
 
             }
         }
-
         public bool TryGetIntValue(string variable, out IntVar intVar)
         {
             return intVars.TryGetValue(variable, out intVar);
@@ -181,7 +189,6 @@ namespace XNode.FSMG.Components
             return tagVariables;
 
         }
-
         public bool TryGetFSMTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
         {
 
@@ -213,42 +220,9 @@ namespace XNode.FSMG.Components
         }
 
         /// <summary>
-        /// Chamado somente em modo editor sempre que o gráfico é modificado para este componente.
-        /// Tenha emmente que ao modificar o grafico as variaveis origem são perdidas e subistituidas pelas variaveis
-        /// do grafico destino.
+        /// Sincroniza as variaveis e trajetos do componente com as variaveis do gráfico de estados
         /// </summary>
-        /// <param name="oldGraph">Grafico origem</param>
-        /// <param name="newGraph">Grafico destino</param>
-        protected virtual void OnGraphChangedInEditor(Graph_State oldGraph, Graph_State newGraph)
-        {
-            if (oldGraph == newGraph)
-                return;
-
-            if (newGraph == null)
-            {
-                ClearVariables();
-                return;
-            }
-
-            SyncVariables();
-        }
-
-        /// <summary>
-        /// Apaga todos os valores contidos nas variaveis de gráfico. Int, Float, Double e Bool.
-        /// </summary>
-        protected void ClearVariables()
-        {
-            intVars.Clear();
-            floatVars.Clear();
-            doubleVars.Clear();
-            boolVars.Clear();
-            targets.Clear();
-        }
-
-        /// <summary>
-        /// Sincroniza as variaveis do componente com as variaveis do gráfico de estados
-        /// </summary>
-        public void SyncVariables()
+        public void SyncVariablesAndTargets()
         {
             SyncTargets();
 
@@ -304,6 +278,46 @@ namespace XNode.FSMG.Components
             graphVariables = null;
 
         }
+        public bool CheckIfCountDownElapsed(float duration)
+        {
+            if (graph == null)
+                return false;
+
+            return (graph.CurrentStateElapsedTime >= duration);
+        }
+
+        /// <summary>
+        /// Chamado somente em modo editor sempre que o gráfico é modificado para este componente.
+        /// Tenha emmente que ao modificar o grafico as variaveis origem são perdidas e subistituidas pelas variaveis
+        /// do grafico destino.
+        /// </summary>
+        /// <param name="oldGraph">Grafico origem</param>
+        /// <param name="newGraph">Grafico destino</param>
+        protected virtual void OnGraphChangedInEditor(Graph_State oldGraph, Graph_State newGraph)
+        {
+            if (oldGraph == newGraph)
+                return;
+
+            if (newGraph == null)
+            {
+                ClearVariablesAndTargets();
+                return;
+            }
+
+            SyncVariablesAndTargets();
+        }
+
+        /// <summary>
+        /// Apaga todos os valores contidos nas variaveis de gráfico. Int, Float, Double e Bool e também trajetos
+        /// </summary>
+        protected void ClearVariablesAndTargets()
+        {
+            intVars.Clear();
+            floatVars.Clear();
+            doubleVars.Clear();
+            boolVars.Clear();
+            targets.Clear();
+        }
         private void SyncTargets()
         {
             if (graph == null)
@@ -334,13 +348,6 @@ namespace XNode.FSMG.Components
 
             graphTargets.Clear();
             graphTargets = null;
-        }
-        public bool CheckIfCountDownElapsed(float duration)
-        {
-            if (graph == null)
-                return false;
-
-            return (graph.CurrentStateElapsedTime >= duration);
         }
 
     }

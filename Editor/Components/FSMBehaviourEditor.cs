@@ -31,7 +31,7 @@ namespace XNode.FSMG.Components
 
             if (onSyncVariables == false)
             {
-                fsmBehaviour.SyncVariables();
+                fsmBehaviour.SyncVariablesAndTargets();
                 onSyncVariables = true;
                 return;
             }

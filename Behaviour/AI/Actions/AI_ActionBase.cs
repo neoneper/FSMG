@@ -10,11 +10,15 @@ namespace XNode.FSMG
         [SerializeField, GraphState(callback: "OnGraphChangeInEditor")]
         private Graph_State graph = null;
 
+        /// <summary>
+        /// This is the state graph to which this action belongs. 
+        /// If a graph is defined for this action, it can only be seen by the graph to which it belongs. 
+        /// If no graph is defined, this action can be used by any state graph.
+        /// </summary>
         public Graph_State Graph { get { return graph; } }
 
         public abstract void Execute(FSMBehaviour fsm);
-
-
+        
         protected virtual void OnGraphChangeInEditor(Graph_State old, Graph_State newg)
         {
 
