@@ -1,4 +1,4 @@
-# FSMG Last Update at Unity 2019.3.9f1
+# FSMG Last Update at Unity 2019.3.9f1 / Compatible with 2018.1+
 https://www.youtube.com/watch?v=WlDU9wm8t6c&t=28s
 
 Doc: https://github.com/neoneper/FSMG/wiki
