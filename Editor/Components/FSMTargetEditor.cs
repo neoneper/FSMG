@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace XNode.FSMG.Components
+namespace FSMG.Components
 {/*
     [CustomEditor(typeof(FSMTarget)), CanEditMultipleObjects()]
     public class FSMTargetEditor : Editor

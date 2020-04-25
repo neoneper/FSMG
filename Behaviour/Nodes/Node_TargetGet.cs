@@ -3,9 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
-using XNode.FSMG.Components;
+using FSMG.Components;
+using XNode;
 
-namespace XNode.FSMG
+namespace FSMG
 {
 
     [NodeWidth(200), NodeTint("#7D679B")]

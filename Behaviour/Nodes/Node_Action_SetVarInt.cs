@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using XNode;
-using XNode.FSMG.Components;
+using FSMG.Components;
 
-namespace XNode.FSMG
+ namespace FSMG
 {
     [CreateNodeMenu("Variables/Set/Int")]
     public class Node_Action_SetVarInt : NodeBase_Action

@@ -1,11 +1,11 @@
-﻿using XNode.FSMG.Components;
+﻿using FSMG.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 using UnityEngine.AI;
 
-namespace XNode.FSMG
+namespace FSMG
 {
     [CreateNodeMenu("Decisions/Or")]
     public class Node_Decision_Or : NodeBase_Decision

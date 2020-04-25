@@ -4,9 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode.FSMG;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     public static class PropertyUtility
     {

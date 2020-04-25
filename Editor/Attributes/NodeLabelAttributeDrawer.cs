@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(NodeLabelAttribute))]
     public class NodeLabelAttributeDrawer : PropertyDrawer

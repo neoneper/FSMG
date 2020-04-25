@@ -5,9 +5,9 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-using XNode.FSMG;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(NodeAIDececisionAttribute))]
     public class NodeAIDececisionAttributeDrawer : PropertyDrawer

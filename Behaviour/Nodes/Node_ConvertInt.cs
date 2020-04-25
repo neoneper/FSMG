@@ -6,7 +6,8 @@ using UnityEngine;
 
 
 
-namespace XNode.FSMG
+using XNode;
+namespace FSMG
 {
 
     [NodeWidth(200), NodeTint("#ff7b47")]

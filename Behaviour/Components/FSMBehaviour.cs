@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
-using XNode.FSMG;
-using XNode.FSMG.SerializableDictionary;
 
-namespace XNode.FSMG.Components
+namespace FSMG.Components
 {
     /// <summary>
     /// Base component to create FSM components in behaviours. 
@@ -23,15 +19,15 @@ namespace XNode.FSMG.Components
         private List<FSMTargetGlobal> _globalTargets = null;
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
-        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private TargetListLocal targets = null;
-        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private IntVarList intVars = null;
-        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private FloatVarList floatVars = null;
-        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private DoubleVarList doubleVars = null;
-        [SerializeField, DrawOptions(false, false), DrawKeyAsLabel]
+        [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private BoolVarList boolVars = null;
         private bool readyToWork = false;
         /// <summary>

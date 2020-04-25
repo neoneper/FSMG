@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode.FSMG.Components;
-using XNode.FSMG.SerializableDictionary;
+using FSMG.Components;
+using FSMG;
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     [Serializable]
     public enum TargetType

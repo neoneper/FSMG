@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace XNode.FSMG.Components
+using XNode; namespace FSMG.Components
 {
     [AddComponentMenu("FSM/TargetGlobal")]
     public class FSMTargetGlobal : FSMTargetBehaviour

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-using XNode.FSMG;
+using XNodeEditor;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+namespace FSMGEditor
 {
     [CustomNodeEditor(typeof(NodeBase_State))]
     public class NodeBase_StateEditor : NodeEditor

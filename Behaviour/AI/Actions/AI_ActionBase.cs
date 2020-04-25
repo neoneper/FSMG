@@ -1,9 +1,9 @@
-﻿using XNode.FSMG.Components;
+﻿using FSMG.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     /// <summary>
     /// Base para criar todas as suas ações do tipo scriptableObject.

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using XNode;
-using XNode.FSMG.Components;
+using FSMG.Components;
 
-namespace XNode.FSMG
+namespace FSMG
 {
     [CreateNodeMenu("Variables/Set/Float")]
     public class Node_Action_SetVarFloat : NodeBase_Action

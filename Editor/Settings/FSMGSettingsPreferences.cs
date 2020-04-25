@@ -5,9 +5,9 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using XNode.FSMG;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     // Create MyCustomSettingsProvider by deriving from SettingsProvider:
     class FSMSettingsProvider : SettingsProvider

@@ -1,13 +1,13 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using XNode;
-using XNode.FSMG;
-using XNode.FSMG.SerializableDictionary;
+using FSMG;
+using XNodeEditor;
 
-namespace XNodeEditor.FSMG
+
+namespace FSMGEditor
 {
     [CustomNodeGraphEditor(typeof(Graph_State))]
     public class Graph_StateEditor : NodeGraphEditor
@@ -21,9 +21,9 @@ namespace XNodeEditor.FSMG
         /// </summary>
         public override string GetNodeMenuName(System.Type type)
         {
-            if (type.Namespace == "XNode.FSMG")
+            if (type.Namespace == "FSMG")
             {
-                string m = base.GetNodeMenuName(type).Replace("X Node/FSMG/Graph_State/", "");
+                string m = base.GetNodeMenuName(type).Replace("FSMG/Graph_State/", "");
                 return m;
             }
             else

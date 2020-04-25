@@ -1,7 +1,9 @@
-﻿namespace XNode.FSMG.SerializableDictionary
+﻿using System;
+
+namespace FSMG
 {
-    [System.AttributeUsage(System.AttributeTargets.Field)]
-    public class IDAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public class SD_IDAttribute : Attribute
     {
         private string _id;
 
@@ -14,7 +16,7 @@
         /// Serializable field name for the property id
         /// </summary>
         /// <param name="id">Field name</param>
-        public IDAttribute(string id)
+        public SD_IDAttribute(string id)
         {
             _id = id;
         }

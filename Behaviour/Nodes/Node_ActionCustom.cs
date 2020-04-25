@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
-using XNode.FSMG.Components;
+using FSMG.Components;
 
-namespace XNode.FSMG
+namespace FSMG
 {
     [CreateNodeMenu("Actions/Custom")]
     public class Node_ActionCustom : NodeBase_Action

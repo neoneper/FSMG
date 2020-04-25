@@ -1,13 +1,13 @@
-﻿using XNode.FSMG.Components;
+﻿using FSMG.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode.FSMG.SerializableDictionary;
+using FSMG;
 using System.Linq;
 using Unity.Collections;
 using System;
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     [CreateAssetMenu(fileName = "New State Graph", menuName = "FSMG/Graphs/State Graph")]
     public class Graph_State : NodeGraph
@@ -115,7 +115,7 @@ namespace XNode.FSMG
         //VARIAVEIS CUSTOMIZADAS
         //======================================================================================//
 
-        [SerializeField, DrawKeyAsLabel(), DrawOptions(false, true, true)]
+        [SerializeField, SD_DrawKeyAsLabel(), SD_DrawOptions(false, true, true)]
         private TagVarList variables = null;
         [SerializeField]
         private TargetListGlobal targets = null;

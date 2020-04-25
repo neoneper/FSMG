@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
+using FSMG;
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     public class FSMGSettings : ScriptableObject
     {

@@ -1,10 +1,9 @@
-﻿using XNode.FSMG.Components;
+﻿using FSMG.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
-
-namespace XNode.FSMG
+namespace FSMG
 {
     [CreateNodeMenu("Decisions/Custom List")]
     public class Node_DecisionListCustom : NodeBase_Decision

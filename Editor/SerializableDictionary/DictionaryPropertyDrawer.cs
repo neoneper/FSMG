@@ -3,8 +3,9 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using FSMG;
 
-namespace XNode.FSMG.SerializableDictionary
+namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(DrawableDictionary), true)]
     public class DictionaryPropertyDrawer : PropertyDrawer
@@ -323,7 +324,7 @@ namespace XNode.FSMG.SerializableDictionary
             {
                 if (!list.HasList)
                 {
-                    DrawOptionsAttribute optAttrib = System.Attribute.GetCustomAttribute(fieldInfo, typeof(DrawOptionsAttribute)) as DrawOptionsAttribute;
+                    SD_DrawOptionsAttribute optAttrib = System.Attribute.GetCustomAttribute(fieldInfo, typeof(SD_DrawOptionsAttribute)) as SD_DrawOptionsAttribute;
 
                     bool _canAdd = true;
                     bool _canRemove = true;
@@ -389,7 +390,7 @@ namespace XNode.FSMG.SerializableDictionary
         {
             float height;
 
-            bool containsAttribute = fieldInfo.GetCustomAttributes(typeof(DrawKeyAsPropertyAttribute), true).Any();
+            bool containsAttribute = fieldInfo.GetCustomAttributes(typeof(SD_DrawKeyAsPropertyAttribute), true).Any();
 
             height = EditorGUI.GetPropertyHeight(element, GUIContent.none, true) + list.verticalSpacing * 4;
 
@@ -428,9 +429,9 @@ namespace XNode.FSMG.SerializableDictionary
             rect.height = EditorGUIUtility.singleLineHeight;
 
             //Check if it contains the new attribute
-            bool containsAttribute = fieldInfo.GetCustomAttributes(typeof(DrawKeyAsPropertyAttribute), true).Any();
+            bool containsAttribute = fieldInfo.GetCustomAttributes(typeof(SD_DrawKeyAsPropertyAttribute), true).Any();
 
-            DrawKeyAsLabelAttribute keyAsLabel = fieldInfo.GetCustomAttribute<DrawKeyAsLabelAttribute>(true);
+            SD_DrawKeyAsLabelAttribute keyAsLabel = fieldInfo.GetCustomAttribute<SD_DrawKeyAsLabelAttribute>(true);
 
 
             Rect keyRect = new Rect(rect.x + 50, rect.y + 4, rect.width - 52, rect.height);
@@ -923,7 +924,7 @@ namespace XNode.FSMG.SerializableDictionary
         {
             SetValue(keyProp, obj);
 
-            IDAttribute attribute = System.Attribute.GetCustomAttribute(fieldInfo, typeof(IDAttribute)) as IDAttribute;
+            SD_IDAttribute attribute = System.Attribute.GetCustomAttribute(fieldInfo, typeof(SD_IDAttribute)) as SD_IDAttribute;
 
             if (attribute == null)
             {

@@ -1,10 +1,10 @@
-﻿using XNode.FSMG.Components;
+﻿using FSMG.Components;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace XNode.FSMG
+namespace FSMG
 {
 
     public abstract class NodeBase_State : Node, INodeNoodleLabel

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
-using XNode.FSMG.Components;
+using FSMG;
+using FSMG.Components;
 
-namespace XNode.FSMG.Components
+namespace FSMGEditor
 {
     [CustomEditor(typeof(FSMBehaviour), true), CanEditMultipleObjects]
     public class FSMBehaviourEditor : Editor

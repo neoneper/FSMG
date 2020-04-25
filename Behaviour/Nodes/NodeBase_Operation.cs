@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     public abstract class NodeBase_Operation<T> : Node where T : IComparable<T>
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
 
     [NodeWidth(150), NodeTint("#ff7b47")]

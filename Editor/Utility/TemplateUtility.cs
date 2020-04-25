@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     public static class TemplateUtility
     {

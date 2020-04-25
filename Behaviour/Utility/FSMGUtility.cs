@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
     public class FSMGUtility
     {

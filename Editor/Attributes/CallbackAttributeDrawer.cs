@@ -5,10 +5,9 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
-using XNode.FSMG.Components;
+using FSMG;
 
-namespace XNodeEditor.FSMG
+namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(CallbackAttribute))]
     public class CallbackAttributeDrawer : PropertyDrawer

@@ -6,10 +6,10 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using XNode.FSMG;
-using XNode.FSMG.Components;
+using FSMG;
+using FSMG.Components;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;   namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(NodeEnumCallbackAttribute))]
     public class NodeEnumCallbackAttributeDrawer : PropertyDrawer

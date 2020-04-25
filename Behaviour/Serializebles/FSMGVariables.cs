@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿
 using System;
-using XNode.FSMG.SerializableDictionary;
+using FSMG;
 
-namespace XNode.FSMG
+namespace FSMG
 {
     /// <summary>
     /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="int"/>.

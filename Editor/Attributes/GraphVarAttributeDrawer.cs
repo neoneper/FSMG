@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
-using XNode.FSMG.Components;
+using FSMG;
+using FSMG.Components;
 
-namespace XNodeEditor.FSMG
+using XNodeEditor;
+namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(GraphVarAttribute))]
     public class GraphVarAttributeDrawer : PropertyDrawer

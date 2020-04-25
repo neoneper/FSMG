@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using XNode;
-using XNode.FSMG.Components;
-
-namespace XNode.FSMG
+using FSMG.Components;
+namespace FSMG
 {
     [CreateNodeMenu("Variables/Set/Bool")]
     public class Node_Action_SetVarBool : NodeBase_Action

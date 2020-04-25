@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode.FSMG.Components;
+using FSMG.Components;
+using XNode;
 
-namespace XNode.FSMG
+namespace FSMG
 {
 
     [AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]

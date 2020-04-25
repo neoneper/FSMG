@@ -1,6 +1,8 @@
 using UnityEditor;
 
-namespace XNode.FSMG.SerializableDictionary
+using FSMG;
+
+namespace FSMGEditor
 {
     public sealed class Constants
     {

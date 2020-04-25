@@ -1,9 +1,8 @@
-using XNode.FSMG.SerializableDictionary;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace XNode.FSMG.SerializableDictionary
+namespace FSMG
 {
     /// <summary>
     /// This class is only used to be able to draw the custom property drawer

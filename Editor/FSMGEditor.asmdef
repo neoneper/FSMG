@@ -1,9 +1,13 @@
 {
-    "name": "FSMG",
+    "name": "FSMGEditor",
     "references": [
-        "GUID:b8e24fd1eb19b4226afebb2810e3c19b"
+        "GUID:431b0cc509e383a4c8eb1fa0be38dfa3",
+        "GUID:b8e24fd1eb19b4226afebb2810e3c19b",
+        "GUID:002c1bbed08fa44d282ef34fd5edb138"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

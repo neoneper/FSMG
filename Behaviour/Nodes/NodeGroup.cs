@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XNode;
 
-namespace XNode.FSMG {
+namespace FSMG {
 	[CreateNodeMenu("Group")]
 	public class NodeGroup : Node {
 		public int width = 400;

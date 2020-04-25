@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-namespace XNode.FSMG
+using XNode; namespace FSMG
 {
 
     [CreateNodeMenu("Variables/Get/Int")]

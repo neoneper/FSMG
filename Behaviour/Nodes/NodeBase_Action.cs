@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using XNode;
-using XNode.FSMG.Components;
+using FSMG.Components;
 
-namespace XNode.FSMG
+using XNode;
+namespace FSMG
 {
     [NodeTint("#4AA7FF")]
     public abstract class NodeBase_Action : Node, INodeNoodleLabel

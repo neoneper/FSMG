@@ -5,10 +5,11 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
-using XNode.FSMG.Components;
+using FSMG;
+using FSMG.Components;
+using XNodeEditor;
 
-namespace XNodeEditor.FSMG
+namespace FSMGEditor
 {
     [CustomPropertyDrawer(typeof(FSMTargetsAttribute))]
     public class FSMTargetsAttributeDrawer : PropertyDrawer

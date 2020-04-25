@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-namespace XNode.FSMG.SerializableDictionary
+namespace FSMGEditor
 {
     [InitializeOnLoad]
     public class Definer

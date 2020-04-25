@@ -4,10 +4,11 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using XNode;
+using XNodeEditor;
 
-namespace XNodeEditor
+namespace FSMGEditor
 {
-    public static class NodeGraphEditorUtility
+    public static class NodeGraphEditorUtility 
     {
         /// <summary>
         /// Draw label field at noodle connections. Implement <seealso cref="XNode.INodeNoodleLabel"/> at their nodes to 

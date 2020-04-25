@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace XNode.FSMG.SerializableDictionary
+namespace FSMGEditor
 {
     public class PreferencesWindow
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using XNode.FSMG;
+using FSMG;
 
 
-namespace XNode.FSMG.Components
+using XNode; namespace FSMG.Components
 {
     public static class FSMTargetExtensions
     {
@@ -32,7 +32,7 @@ namespace XNode.FSMG.Components
     /// </summary>
     public abstract class FSMTargetBehaviour : MonoBehaviour
     {
-        public static string UndefinedTag { get { return XNode.FSMG.FSMGUtility.StringTag_Undefined; } }
+        public static string UndefinedTag { get { return FSMG.FSMGUtility.StringTag_Undefined; } }
                 
         /// <summary>
         /// nome do trajeto referenciado na lista global <seealso cref="FSMGSettings.TargetsName"/> ou em uma lista local

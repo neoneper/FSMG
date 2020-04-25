@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using XNode.FSMG;
+using FSMG;
+using XNodeEditor;
 
 
-namespace XNodeEditor.FSMG
+namespace FSMGEditor
 {
     [CustomNodeEditor(typeof(NodeGroup))]
     public class NodeGroupEditor : NodeEditor
@@ -70,7 +71,7 @@ namespace XNodeEditor.FSMG
                     // Ignore everything except left clicks
                     if (e.button != 0) return;
 
-                   
+
 
 
                     if (NodeEditorWindow.current.nodeSizes.TryGetValue(target, out size))

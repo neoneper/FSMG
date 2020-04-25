@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace XNode.FSMG.SerializableDictionary
+namespace FSMG
 {
     [System.Serializable]
     public class ReorderableList
