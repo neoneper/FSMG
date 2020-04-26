@@ -5,7 +5,7 @@ using UnityEngine;
 using XNode;
 using FSMG;
 using XNodeEditor;
-
+using FSMG.Components;
 
 namespace FSMGEditor
 {
@@ -88,6 +88,7 @@ namespace FSMGEditor
          
             foreach (UnityEngine.Object unityObject in objects)
             {
+
                 switch (unityObject.GetFSMGType())
                 {
                     case GraphObjectType.AIActionBase:
@@ -95,6 +96,12 @@ namespace FSMGEditor
                         break;
                     case GraphObjectType.AIDecisionBase:
                         CreateCustomDecisionNode(unityObject);
+                        break;
+                    case GraphObjectType.FSMTargetLocal:
+                        CreateGetTargetLocalNode(unityObject);
+                        break;
+                    case GraphObjectType.FSMTargetGlobal:
+                        CreateGetTargetGlobalNode(unityObject);
                         break;
                     default:
                         break;
@@ -129,6 +136,44 @@ namespace FSMGEditor
             Node node = CreateNode(typeof(Node_DecisionCustom), gridPos);
             Node_DecisionCustom decisionNode = (Node_DecisionCustom)node;
             decisionNode.SetAI_DecisionBase((AI_DecisionBase)go);
+        }
+        private void CreateGetTargetLocalNode(UnityEngine.Object go)
+        {
+            GameObject gameObject = (GameObject)go;
+            FSMTargetLocal fsmt_local = gameObject.GetComponent<FSMTargetLocal>();
+
+            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
+            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
+            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
+            gridPos.x += randomPosx;
+            gridPos.y += randomPosy;
+
+            Node node = CreateNode(typeof(Node_TargetGet), gridPos);
+            Node_TargetGet getTarget = (Node_TargetGet)node;
+
+            getTarget.SetTarget(fsmt_local.targetName, TargetLocalType.local);
+
+           
+
+        }
+        private void CreateGetTargetGlobalNode(UnityEngine.Object go)
+        {
+            GameObject gameObject = (GameObject)go;
+            FSMTargetGlobal fsmt_global = gameObject.GetComponent<FSMTargetGlobal>();
+
+            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
+            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
+            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
+            gridPos.x += randomPosx;
+            gridPos.y += randomPosy;
+
+            Node node = CreateNode(typeof(Node_TargetGet), gridPos);
+            Node_TargetGet getTarget = (Node_TargetGet)node;
+
+            getTarget.SetTarget(fsmt_global.targetName, TargetLocalType.global);
+
+
+
         }
 
     }

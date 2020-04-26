@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSMG.Components;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,9 @@ namespace FSMG
     {
         None,
         AIActionBase,
-        AIDecisionBase
+        AIDecisionBase,
+        FSMTargetLocal,
+        FSMTargetGlobal
     }
     public class FSMGUtility
     {
@@ -198,6 +201,17 @@ namespace FSMG
                 return GraphObjectType.AIActionBase;
             else if (unityObject is AI_DecisionBase)
                 return GraphObjectType.AIDecisionBase;
+            else if (unityObject is GameObject)
+            {
+                FSMTargetLocal clocal = ((GameObject)unityObject).GetComponent<FSMTargetLocal>();
+                FSMTargetGlobal cglobal = ((GameObject)unityObject).GetComponent<FSMTargetGlobal>();
+
+                if (clocal != null)
+                    return GraphObjectType.FSMTargetLocal;
+                else if (cglobal != null)
+                    return GraphObjectType.FSMTargetGlobal;
+                else return GraphObjectType.None;
+            }
             else return GraphObjectType.None;
         }
     }

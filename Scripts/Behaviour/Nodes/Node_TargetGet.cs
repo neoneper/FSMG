@@ -31,9 +31,11 @@ namespace FSMG
         {
             return GetTarget();
         }
-
-
-
+        public void SetTarget(string targetName, TargetLocalType localType)
+        {
+            this.localType = localType;
+            this.targetName = targetName;
+        }
         private FSMTargetBehaviour GetTarget()
         {
             if (string.IsNullOrEmpty(targetName) || targetName.Equals(FSMGUtility.StringTag_Undefined))
@@ -48,6 +50,7 @@ namespace FSMG
 
             return result;
         }
+
     }
 
 
