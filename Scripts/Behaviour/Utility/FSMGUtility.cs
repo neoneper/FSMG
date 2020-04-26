@@ -3,8 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using XNode; namespace FSMG
+using XNode;
+namespace FSMG
 {
+
+    public enum GraphObjectType
+    {
+        None,
+        AIActionBase,
+        AIDecisionBase
+    }
     public class FSMGUtility
     {
         public static string StringTag_None
@@ -181,6 +189,17 @@ using XNode; namespace FSMG
 
     }
 
+    public static class NodesExtensions
+    {
+        public static GraphObjectType GetFSMGType(this UnityEngine.Object unityObject)
+        {
 
+            if (unityObject is AI_ActionBase)
+                return GraphObjectType.AIActionBase;
+            else if (unityObject is AI_DecisionBase)
+                return GraphObjectType.AIDecisionBase;
+            else return GraphObjectType.None;
+        }
+    }
 
 }

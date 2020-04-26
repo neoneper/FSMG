@@ -79,7 +79,62 @@ namespace FSMGEditor
         {
             base.RemoveNode(node);
         }
+
+        public override void OnDropObjects(UnityEngine.Object[] objects)
+        {
+
+            Event.current.Use();
+
+         
+            foreach (UnityEngine.Object unityObject in objects)
+            {
+                switch (unityObject.GetFSMGType())
+                {
+                    case GraphObjectType.AIActionBase:
+                        CreateCustomActionNode(unityObject);
+                        break;
+                    case GraphObjectType.AIDecisionBase:
+                        CreateCustomDecisionNode(unityObject);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+
+            // base.OnDropObjects(objects);
+        }
+
+        private void CreateCustomActionNode(UnityEngine.Object go)
+        {
+            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
+            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
+            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
+            gridPos.x += randomPosx;
+            gridPos.y += randomPosy;
+          
+            Node node = CreateNode(typeof(Node_ActionCustom), gridPos);
+            Node_ActionCustom actionNode = (Node_ActionCustom)node;
+            actionNode.SetAI_ActionBase((AI_ActionBase)go);
+        }
+        private void CreateCustomDecisionNode(UnityEngine.Object go)
+        {
+          
+            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
+            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
+            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
+            gridPos.x += randomPosx;
+            gridPos.y += randomPosy;
+
+            Node node = CreateNode(typeof(Node_DecisionCustom), gridPos);
+            Node_DecisionCustom decisionNode = (Node_DecisionCustom)node;
+            decisionNode.SetAI_DecisionBase((AI_DecisionBase)go);
+        }
+
     }
+
+
+
 
     [CustomEditor(typeof(Graph_State), true)]
     public class GlobalGraphEditor : Editor

@@ -16,6 +16,7 @@ namespace FSMG
         [SerializeField, NodeAIAction(true)]
         private AI_ActionBase action = null;
 
+        public void SetAI_ActionBase(AI_ActionBase action) { this.action = action; }
 
         public override void Execute(FSMBehaviour fsm)
         {

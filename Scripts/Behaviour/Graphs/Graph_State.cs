@@ -345,6 +345,9 @@ using XNode; namespace FSMG
         {
             base.RemoveNode(node);
         }
+
+        
+
         public Graph_State Instance
         {
             get

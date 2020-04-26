@@ -31,6 +31,11 @@ namespace FSMG
             base.Init();
         }
 
+        public void SetAI_DecisionBase(AI_DecisionBase go)
+        {
+            aiDecision = go;
+        }
+
         public override bool Execute(FSMBehaviour fsm)
         {
             CheckReferenceIsValid();
