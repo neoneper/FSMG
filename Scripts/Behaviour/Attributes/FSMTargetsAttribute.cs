@@ -13,7 +13,7 @@ namespace FSMG
     {
         private string callbackname;
         private bool useNodeEnum;
-        private bool filterEnnable = true;
+        private bool filterEnnable = false;
         private string getListFunction = "";
         private bool useOwnList = false;
 
@@ -23,7 +23,7 @@ namespace FSMG
         public string GetListFunctionName { get { return getListFunction; } }
         public bool IsUseOwnListTargets { get { return useOwnList; } }
 
-        public FSMTargetsAttribute(bool nodeEnum = false, bool filterIsEnnable = true, bool useOwnList = false, string getListFunction = "", string callback = "")
+        public FSMTargetsAttribute(bool nodeEnum = false, bool filterIsEnnable = false, bool useOwnList = false, string getListFunction = "", string callback = "")
         {
             filterEnnable = filterIsEnnable;
             useNodeEnum = nodeEnum;

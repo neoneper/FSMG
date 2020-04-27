@@ -17,5 +17,8 @@ using XNode; namespace FSMG.Components
                 return target;
             }
         }
+
+
+        public FSMTargetBehaviour ToGeneric() { return (FSMTargetBehaviour)this; }
     }
 }

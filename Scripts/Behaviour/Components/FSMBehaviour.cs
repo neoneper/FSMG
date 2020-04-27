@@ -14,9 +14,7 @@ namespace FSMG.Components
         //Quando falso o componente irá criar uma instancia do gráfico original para trabalhar.
         //Uma vez criado a instancia esta variavel se torna verdadeira e impede novas instancais.
         private bool isGraphInstantied = false;
-        //Lista de trajetos globais já instanciados no mundo.
-        //ésta lista será populada somente uma vez, quando requisitado pelo seu metodo publico GET,
-        private List<FSMTargetGlobal> _globalTargets = null;
+
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
@@ -30,6 +28,7 @@ namespace FSMG.Components
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private BoolVarList boolVars = null;
         private bool readyToWork = false;
+
         /// <summary>
         /// Utilzie esta váriavel para fazer com que ações e decisões e outros componentes
         /// saibam quando devem esperar para trabalhar.  
@@ -57,25 +56,7 @@ namespace FSMG.Components
                 return _graph;
             }
         }
-        /// <summary>
-        /// Uma Lista de trajetos globais já instanciados no mundo.
-        /// </summary>
-        public List<FSMTargetGlobal> globalTargets
-        {
-            get
-            {
-                //A ideia é popular a lista somente a primeira vez que foi requisitado por este componente.
-                //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
-                if (_globalTargets == null)
-                {
-                    _globalTargets = FindObjectsOfType<FSMTargetGlobal>().ToList();
-                    _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
-                }
 
-                return new List<FSMTargetGlobal>(_globalTargets);
-
-            }
-        }
         /// <summary>
         /// Procura e retorna em caso de sucesso uma variavel de gráfico do tipo <see cref="IntVar"/>
         /// </summary>
@@ -238,43 +219,35 @@ namespace FSMG.Components
 
         }
         /// <summary>
-        /// Procura 
+        /// Procura e retorna todos os trajetos com o nome especificado
         /// </summary>
-        /// <param name="targetName">Nome do trajeto a ser procurado</param>
-        /// <param name="fsmTarget">variavel para alocação, se encontrado</param>
+        /// <param name="targetName">Nome dos trajetos a serem procurados</param>
+        /// <param name="fsmTarget">lista que recebe os resultados</param>
         /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
         /// ou se é global <see cref="FSMTargetGlobal"/>
         /// </param>
         /// <returns>Verdadeiro se encontrado</returns>
-        public bool TryGetFSMTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
+        public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType localType)
         {
 
             switch (localType)
             {
                 case TargetLocalType.global:
-                    fsmTarget = globalTargets.Find(r => r.targetName.Equals(targetName));
+                    FSManager.Instance.TryGetFSMTarget(targetName, out fsmTargets);
                     break;
                 case TargetLocalType.local:
-
-                    TargetLocal localtarget = null;
-                    if (targets.TryGetValue(targetName, out localtarget))
-                    {
-                        fsmTarget = localtarget.fsmTarget;
-                    }
-                    else
-                    {
-                        fsmTarget = null;
-                    }
+                    fsmTargets = targets.Where(pair => pair.Key == targetName).Select(pair => pair.Value.fsmTarget).ToList();
                     break;
                 default:
-
-                    fsmTarget = null;
+                    fsmTargets = new List<FSMTargetBehaviour>(0);
                     break;
 
             }
 
-            return fsmTarget != null;
+            return fsmTargets.Count > 0;
         }
+
+
         /// <summary>
         /// Sincroniza as variaveis e trajetos do componente com as variaveis do gráfico de estados
         /// </summary>

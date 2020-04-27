@@ -24,7 +24,8 @@ using XNode; namespace FSMG
             
             return targetType.ToString();
         }
-    }
+    }   
+
 
     [Serializable]
     public enum TargetLocalType
@@ -38,6 +39,7 @@ using XNode; namespace FSMG
     {
 
     }
+    
     [Serializable]
     public class TargetListLocal : SerializableDictionaryBase<string, TargetLocal>
     {

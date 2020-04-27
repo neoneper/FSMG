@@ -148,8 +148,8 @@ namespace FSMGEditor
             gridPos.x += randomPosx;
             gridPos.y += randomPosy;
 
-            Node node = CreateNode(typeof(Node_TargetGet), gridPos);
-            Node_TargetGet getTarget = (Node_TargetGet)node;
+            Node node = CreateNode(typeof(Node_TargetsGet), gridPos);
+            Node_TargetsGet getTarget = (Node_TargetsGet)node;
 
             getTarget.SetTarget(fsmt_local.targetName, TargetLocalType.local);
 
@@ -167,8 +167,8 @@ namespace FSMGEditor
             gridPos.x += randomPosx;
             gridPos.y += randomPosy;
 
-            Node node = CreateNode(typeof(Node_TargetGet), gridPos);
-            Node_TargetGet getTarget = (Node_TargetGet)node;
+            Node node = CreateNode(typeof(Node_TargetsGet), gridPos);
+            Node_TargetsGet getTarget = (Node_TargetsGet)node;
 
             getTarget.SetTarget(fsmt_global.targetName, TargetLocalType.global);
 

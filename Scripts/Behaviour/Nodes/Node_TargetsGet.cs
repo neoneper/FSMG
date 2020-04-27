@@ -11,8 +11,9 @@ namespace FSMG
 
     [NodeWidth(200), NodeTint("#7D679B")]
     [CreateNodeMenu("Targets/Get")]
-    public class Node_TargetGet : Node
+    public class Node_TargetsGet : Node
     {
+      
         [SerializeField, NodeEnum]
         private TargetLocalType localType = TargetLocalType.local;
 
@@ -20,7 +21,7 @@ namespace FSMG
         private string targetName = "";
 
         [Output]
-        public FSMTargetBehaviour outTarget;
+        public List<FSMTargetBehaviour> outTargets;
 
         protected List<string> GetTargetsName()
         {
@@ -29,14 +30,14 @@ namespace FSMG
 
         public override object GetValue(NodePort port)
         {
-            return GetTarget();
+            return GetTargets();
         }
         public void SetTarget(string targetName, TargetLocalType localType)
         {
             this.localType = localType;
             this.targetName = targetName;
         }
-        private FSMTargetBehaviour GetTarget()
+        private List<FSMTargetBehaviour> GetTargets()
         {
             if (string.IsNullOrEmpty(targetName) || targetName.Equals(FSMGUtility.StringTag_Undefined))
                 return null;
@@ -44,7 +45,7 @@ namespace FSMG
             if (Application.isEditor && Application.isPlaying == false)
                 return null;
 
-            FSMTargetBehaviour result = null;
+            List<FSMTargetBehaviour> result = null;
 
             ((Graph_State)graph).TryGetTarget(targetName, out result, localType);
 

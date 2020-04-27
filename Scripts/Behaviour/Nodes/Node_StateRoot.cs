@@ -7,7 +7,7 @@ using XNode;
 namespace FSMG
 {
 
-    [CreateNodeMenu("States/Start"), NodeTint("#1DBF00")]
+    [NodeTint("#1DBF00")]
     public class Node_StateRoot : NodeBase_State
     {
 

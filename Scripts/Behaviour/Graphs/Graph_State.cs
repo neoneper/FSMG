@@ -10,6 +10,7 @@ using System;
 using XNode; namespace FSMG
 {
     [CreateAssetMenu(fileName = "New State Graph", menuName = "FSMG/Graphs/State Graph")]
+    [RequireNode(type:typeof(Node_StateRoot))]
     public class Graph_State : NodeGraph
     {
 
@@ -204,9 +205,9 @@ using XNode; namespace FSMG
 
             return result;
         }
-        public bool TryGetTarget(string targetName, out FSMTargetBehaviour fsmTarget, TargetLocalType localType)
+        public bool TryGetTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType localType)
         {
-            return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTarget, localType);
+            return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTargets, localType);
         }
 
         public List<string> GetGlobalVariablesName(GraphVarType vartype)
