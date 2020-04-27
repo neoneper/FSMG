@@ -8,6 +8,7 @@ namespace FSMG
 {
 
     [NodeTint("#1DBF00")]
+    [CreateNodeMenu("States/Start")]
     public class Node_StateRoot : NodeBase_State
     {
 
