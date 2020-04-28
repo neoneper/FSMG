@@ -6,11 +6,13 @@ using UnityEditor;
 using UnityEngine;
 using FSMG;
 
-using XNode; namespace FSMG
+using XNode;
+using System;
+
+namespace FSMG
 {
     public class FSMGSettings : ScriptableObject
     {
-        
         [SerializeField]
         private TargetListGlobal targets = null;
         [SerializeField]
@@ -22,49 +24,42 @@ using XNode; namespace FSMG
         [SerializeField]
         private BoolVarList boolVars = null;
 
-        public string[] TargetsName
+        public List<string> TargetNames
         {
             get
             {
                 List<string> result = new List<string>() { FSMGUtility.StringTag_Undefined };
                 result.AddRange(targets.Keys);
-                return result.ToArray();
+                return result
+;
             }
         }
-        public string[] Int_VariablesName
+        public List<string> Int_VariableNames
         {
             get
             {
-                List<string> result = new List<string>() { FSMGUtility.StringTag_Undefined };
-                result.AddRange(intVars.Keys);
-                return result.ToArray();
+                return intVars.GetVariableNames();
             }
         }
-        public string[] Float_VariablesName
+        public List<string> Float_VariableNames
         {
             get
             {
-                List<string> result = new List<string>() { FSMGUtility.StringTag_Undefined };
-                result.AddRange(floatVars.Keys);
-                return result.ToArray();
+                return floatVars.GetVariableNames();
             }
         }
-        public string[] Double_VariablesName
+        public List<string> Double_VariableNames
         {
             get
             {
-                List<string> result = new List<string>() { FSMGUtility.StringTag_Undefined };
-                result.AddRange(doubleVars.Keys);
-                return result.ToArray();
+                return doubleVars.GetVariableNames();
             }
         }
-        public string[] Bool_VariablesName
+        public List<string> Bool_VariableNames
         {
             get
             {
-                List<string> result = new List<string>() { FSMGUtility.StringTag_Undefined };
-                result.AddRange(boolVars.Keys);
-                return result.ToArray();
+                return boolVars.GetVariableNames();
             }
         }
 
@@ -84,6 +79,106 @@ using XNode; namespace FSMG
         {
             return boolVars.TryGetValue(variable, out boolVar);
         }
+        public bool TryGetIntValue(string variable, out int result)
+        {
+            return intVars.TryGetRealValue(variable, out result);
+        }
+        public bool TryGetFloatValue(string variable, out float result)
+        {
+            return floatVars.TryGetRealValue(variable, out result);
+        }
+        public bool TryGetDoubeVaule(string variable, out double result)
+        {
+            return doubleVars.TryGetRealValue(variable, out result);
+        }
+        public bool TryGetBoolValue(string variable, out bool result)
+        {
+            return boolVars.TryGetRealValue(variable, out result);
+        }
+        public bool SetOrAddValue<T, Y>(string varName, Y value, out T variable) where T : class where Y : IComparable
+        {
+            T result = null;
 
+            if (Exist(varName) == false)
+            {
+                switch (typeof(ValueTuple).ToGraphType())
+                {
+                    case GraphVarType.Boolean:
+                        result = (T)Convert.ChangeType(boolVars.SetOrCreatelValue(varName, Convert.ToBoolean(value)), typeof(T));
+                        break;
+                    case GraphVarType.Double:
+                        result = (T)Convert.ChangeType(doubleVars.SetOrCreatelValue(varName, Convert.ToDouble(value)), typeof(T));
+                        break;
+                    case GraphVarType.Float:
+                        result = (T)Convert.ChangeType(floatVars.SetOrCreatelValue(varName, (float)Convert.ToDouble(value)), typeof(T));
+                        break;
+                    case GraphVarType.Integer:
+                        result = (T)Convert.ChangeType(intVars.SetOrCreatelValue(varName, (int)Convert.ToInt32(value)), typeof(T));
+                        break;
+                    case GraphVarType.Unknown:
+                        result = default(T);
+                        break;
+                }
+            }
+            variable = result;
+            return result != null;
+        }
+        public void RemoveVariable(string varName)
+        {
+            if (intVars.ContainsKey(varName))
+            {
+                intVars.Remove(varName);
+            }
+            else if (floatVars.ContainsKey(varName))
+            {
+                floatVars.Remove(varName);
+            }
+            else if (doubleVars.ContainsKey(varName))
+            {
+                doubleVars.Remove(varName);
+            }
+            else if (boolVars.ContainsKey(varName))
+            {
+                boolVars.Remove(varName);
+            }
+        }
+        public void RemoveVariable(string varName, GraphVarType varType)
+        {
+            switch (varType)
+            {
+                case GraphVarType.Boolean:
+                    boolVars.RemoveVariable(varName);
+                    break;
+                case GraphVarType.Double:
+                    doubleVars.RemoveVariable(varName);
+                    break;
+                case GraphVarType.Float:
+                    floatVars.RemoveVariable(varName);
+                    break;
+                case GraphVarType.Integer:
+                    intVars.RemoveVariable(varName);
+                    break;
+            }
+        }
+        public bool Exist(string varname)
+        {
+            bool result = false;
+
+            result = intVars.ContainsKey(varname);
+            if (result)
+                return result;
+
+            result = floatVars.ContainsKey(varname);
+            if (result)
+                return result;
+
+            result = doubleVars.ContainsKey(varname);
+            if (result)
+                return result;
+
+            result = boolVars.ContainsKey(varname);
+
+            return result;
+        }
     }
 }

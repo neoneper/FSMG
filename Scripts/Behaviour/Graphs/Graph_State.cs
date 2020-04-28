@@ -216,16 +216,16 @@ using XNode; namespace FSMG
             switch (vartype)
             {
                 case GraphVarType.Integer:
-                    variablesName = settings.Int_VariablesName.ToList();
+                    variablesName = settings.Int_VariableNames.ToList();
                     break;
                 case GraphVarType.Float:
-                    variablesName = settings.Float_VariablesName.ToList();
+                    variablesName = settings.Float_VariableNames.ToList();
                     break;
                 case GraphVarType.Double:
-                    variablesName = settings.Double_VariablesName.ToList();
+                    variablesName = settings.Double_VariableNames.ToList();
                     break;
                 case GraphVarType.Boolean:
-                    variablesName = settings.Bool_VariablesName.ToList();
+                    variablesName = settings.Bool_VariableNames.ToList();
                     break;
             }
 
@@ -254,7 +254,7 @@ using XNode; namespace FSMG
         }
         public List<string> GetGlobalTargetsName()
         {
-            return settings.TargetsName.ToList();
+            return settings.TargetNames.ToList();
         }
         public List<string> GetLocalTargetsName()
         {

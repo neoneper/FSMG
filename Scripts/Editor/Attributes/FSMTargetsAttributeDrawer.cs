@@ -102,7 +102,7 @@ namespace FSMGEditor
 
             if (attr.IsUseOwnListTargets == false)
             {
-                guids = FSMGSettingsPreferences.GetOrCreateSettings().TargetsName.ToList();
+                guids = FSMGSettingsPreferences.GetOrCreateSettings().TargetNames.ToList();
                
             }
             else

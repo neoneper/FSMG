@@ -178,9 +178,6 @@ namespace FSMGEditor
 
     }
 
-
-
-
     [CustomEditor(typeof(Graph_State), true)]
     public class GlobalGraphEditor : Editor
     {

@@ -35,7 +35,7 @@ using XNode; namespace FSMG.Components
         public static string UndefinedTag { get { return FSMG.FSMGUtility.StringTag_Undefined; } }
                 
         /// <summary>
-        /// nome do trajeto referenciado na lista global <seealso cref="FSMGSettings.TargetsName"/> ou em uma lista local
+        /// nome do trajeto referenciado na lista global <seealso cref="FSMGSettings.TargetNames"/> ou em uma lista local
         /// de algum gráfico <see cref="Graph_State.GetLocalTargetsName()"/>.
         /// Você poderá utilizar o sistema automático de busca que será apresentado no Inspector como uma lista PopPup.
         /// Para isto utilize o attributo "[FSMTarget]", para capturar automatica a lista de trajetos globais ou então
