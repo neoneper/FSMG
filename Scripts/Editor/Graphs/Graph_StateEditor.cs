@@ -52,18 +52,7 @@ namespace FSMGEditor
 
         public override void OnCreate()
         {
-            // Undo.ClearAll();
-
-            if (graph == null)
-                graph = (Graph_State)target;
-
-            graph.SetSettings(FSMGSettingsPreferences.GetOrCreateSettings());
-
-
-            base.OnCreate();
-
-            //   Undo.RecordObject(graph, "OnCreate");
-
+            FSMGSettingsPreferences.GetOrCreateSettings();
         }
 
         public override Node CreateNode(Type type, Vector2 position)

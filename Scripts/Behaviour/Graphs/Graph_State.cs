@@ -13,16 +13,11 @@ using XNode; namespace FSMG
     [RequireNode(type:typeof(Node_StateRoot))]
     public class Graph_State : NodeGraph
     {
-
-
         public delegate void DelegateOnGraphStateChanged();
         public event DelegateOnGraphStateChanged OnStateChangedEvent;
 
         private float currentState_elapsedTime = 0;
-        private FSMBehaviour last_fsm_executed = null;
-
-        [SerializeField, ReadOnly]
-        private FSMGSettings settings;
+        private FSMBehaviour last_fsm_executed = null;       
 
         //Nó atual do grafico para ser atualizado pelo FSM
         private NodeBase_State _currentState;
@@ -33,7 +28,6 @@ using XNode; namespace FSMG
         {
             get { return currentState_elapsedTime; }
         }
-        public FSMGSettings Settings { get { return settings; } }
 
         /// <summary>
         /// Atual nó de estados que será atualizado pelo <seealso cref="FSMBehaviour"/>
@@ -138,7 +132,7 @@ using XNode; namespace FSMG
                     result = last_fsm_executed.TryGetIntValue(varName, out intVar);
                     break;
                 case GraphVarLocalType.Global:
-                    result = settings.TryGetIntVar(varName, out intVar);
+                    result = FSMGSettings.Instance.TryGetIntVar(varName, out intVar);
                     break;
                 default:
                     intVar = null;
@@ -158,7 +152,7 @@ using XNode; namespace FSMG
                     result = last_fsm_executed.TryGetFloatValue(varName, out floatVar);
                     break;
                 case GraphVarLocalType.Global:
-                    result = settings.TryGetFloatVar(varName, out floatVar);
+                    result = FSMGSettings.Instance.TryGetFloatVar(varName, out floatVar);
                     break;
                 default:
                     floatVar = null;
@@ -177,7 +171,7 @@ using XNode; namespace FSMG
                     result = last_fsm_executed.TryGetDoubeValue(varName, out doubleVar);
                     break;
                 case GraphVarLocalType.Global:
-                    result = settings.TryGetDoubeVar(varName, out doubleVar);
+                    result = FSMGSettings.Instance.TryGetDoubleVar(varName, out doubleVar);
                     break;
                 default:
                     doubleVar = null;
@@ -196,7 +190,7 @@ using XNode; namespace FSMG
                     result = last_fsm_executed.TryGetBooleanValue(varName, out boolVar);
                     break;
                 case GraphVarLocalType.Global:
-                    result = settings.TryGetBoolVar(varName, out boolVar);
+                    result = FSMGSettings.Instance.TryGetBoolVar(varName, out boolVar);
                     break;
                 default:
                     boolVar = null;
@@ -216,16 +210,16 @@ using XNode; namespace FSMG
             switch (vartype)
             {
                 case GraphVarType.Integer:
-                    variablesName = settings.Int_VariablesName.ToList();
+                    variablesName = FSMGSettings.Instance.Int_VariableNames.ToList();
                     break;
                 case GraphVarType.Float:
-                    variablesName = settings.Float_VariablesName.ToList();
+                    variablesName = FSMGSettings.Instance.Float_VariableNames.ToList();
                     break;
                 case GraphVarType.Double:
-                    variablesName = settings.Double_VariablesName.ToList();
+                    variablesName = FSMGSettings.Instance.Double_VariableNames.ToList();
                     break;
                 case GraphVarType.Boolean:
-                    variablesName = settings.Bool_VariablesName.ToList();
+                    variablesName = FSMGSettings.Instance.Bool_VariableNames.ToList();
                     break;
             }
 
@@ -254,7 +248,7 @@ using XNode; namespace FSMG
         }
         public List<string> GetGlobalTargetsName()
         {
-            return settings.TargetsName.ToList();
+            return FSMGSettings.Instance.TargetNames.ToList();
         }
         public List<string> GetLocalTargetsName()
         {
@@ -278,10 +272,6 @@ using XNode; namespace FSMG
 
         }
 
-        public void SetSettings(FSMGSettings settings)
-        {
-            this.settings = settings;
-        }
         public GraphVarAddErrorsType AddTagVariable(string varName, GraphVarType varType)
         {
             GraphVarAddErrorsType result = GraphVarAddErrorsType.none;
@@ -346,8 +336,6 @@ using XNode; namespace FSMG
         {
             base.RemoveNode(node);
         }
-
-        
 
         public Graph_State Instance
         {
