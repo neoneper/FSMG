@@ -21,27 +21,26 @@ namespace FSMG.Components
             }
         }
 
-
         //Lista de trajetos globais já instanciados no mundo.
         //ésta lista será populada somente uma vez, quando requisitado pelo seu metodo publico GET,
-        private List<FSMTargetGlobal> _globalTargets = null;
+        private List<FSMTarget> _targets = null;
 
         /// <summary>
         /// Uma Lista de trajetos globais já instanciados no mundo.
         /// </summary>
-        public List<FSMTargetGlobal> globalTargets
+        public List<FSMTarget> Targets
         {
             get
             {
                 //A ideia é popular a lista somente a primeira vez que foi requisitado por este componente.
                 //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
-                if (_globalTargets == null)
+                if (_targets == null)
                 {
-                    _globalTargets = FindObjectsOfType<FSMTargetGlobal>().ToList();
-                    _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
+                    _targets = FindObjectsOfType<FSMTarget>().ToList();
+                    _targets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
                 }
 
-                return new List<FSMTargetGlobal>(_globalTargets);
+                return new List<FSMTarget>(_targets);
 
             }
         }
@@ -52,13 +51,13 @@ namespace FSMG.Components
         /// <param name="targetName">Nome do trajeto a ser procurado</param>
         /// <param name="fsmTarget">variavel para alocação, se encontrado</param>
         /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
-        /// ou se é global <see cref="FSMTargetGlobal"/>
+        /// ou se é global <see cref="FSMTarget"/>
         /// </param>
         /// <returns>Verdadeiro se encontrado</returns>
-        public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> targetsGlobal)
+        public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> targets)
         {
-            targetsGlobal = globalTargets.Where(r => r.targetName == targetName && r.IsUndefindedTarget == false).Select(r => r.ToGeneric()).ToList();
-            return targetsGlobal.Count > 0;
+            targets = Targets.Where(r => r.targetName == targetName && r.IsUndefindedTarget == false).Select(r => r.ToGeneric()).ToList();
+            return targets.Count > 0;
         }
 
 

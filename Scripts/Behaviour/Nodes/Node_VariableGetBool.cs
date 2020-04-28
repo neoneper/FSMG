@@ -12,16 +12,10 @@ using XNode; namespace FSMG
     [CreateNodeMenu("Variables/Get/Bool")]
     public class Node_VariableGetBool : NodeBase_VariableGet<bool>
     {
-        public override GraphVarType GetGraphVarType()
-        {
-            return GraphVarType.Boolean;
-        }
-        public override List<string> GetVariableNames()
-        {
-            Graph_State graphState = (Graph_State)graph;
+        [SerializeField, GraphVar(true, GraphVarType.Boolean)]
+        private string variableName = FSMGUtility.StringTag_Undefined;
 
-            return graphState.GetVariablesName(GetGraphVarType(), LocalType);
-        }
+        public override string GetVariableName() { return variableName; }
 
 
         public override object GetValue(NodePort port)

@@ -11,18 +11,16 @@ using XNode; namespace FSMG
     {
         private string callbackname = "";
         private bool useNodeEnum = false;
-        private GraphVarLocalType graphVarLocalType;
-        private GraphVarType graphVarType;
-        private string getnames = "";
+        private GraphVarType _varType = GraphVarType.Unknown;
         public bool UseNodeEnum { get { return useNodeEnum; } }
         public string CallbackName { get { return callbackname; } }
-        public string ValuesName { get { return getnames; } }
+        public GraphVarType VarType { get { return _varType; } }
 
-        public GraphVarAttribute(bool nodeEnum = false, string getNamesFunction = "", string callback = "")
+        public GraphVarAttribute(bool nodeEnum = false, GraphVarType varType = GraphVarType.Unknown, string callback = "")
         {
             useNodeEnum = nodeEnum;
             callbackname = callback;
-            getnames = getNamesFunction;
+            _varType = varType;
         }
     }
 }

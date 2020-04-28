@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
-using XNode; namespace FSMG.Components
+namespace FSMG.Components
 {
-    [AddComponentMenu("FSM/TargetGlobal")]
-    public class FSMTargetGlobal : FSMTargetBehaviour
+    [AddComponentMenu("FSM/Target")]
+    public class FSMTarget : FSMTargetBehaviour
     {
-        [SerializeField, FSMTargets]
+        [SerializeField, FSMTargets] 
         private string target = UndefinedTag;
 
         public override string targetName

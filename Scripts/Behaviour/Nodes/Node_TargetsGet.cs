@@ -15,7 +15,7 @@ namespace FSMG
     {
       
         [SerializeField, NodeEnum]
-        private TargetLocalType localType = TargetLocalType.local;
+        private TargetComponentType localType = TargetComponentType.local;
 
         [SerializeField, GraphVar(true, "GetTargetsName")]
         private string targetName = "";
@@ -32,7 +32,7 @@ namespace FSMG
         {
             return GetTargets();
         }
-        public void SetTarget(string targetName, TargetLocalType localType)
+        public void SetTarget(string targetName, TargetComponentType localType)
         {
             this.localType = localType;
             this.targetName = targetName;

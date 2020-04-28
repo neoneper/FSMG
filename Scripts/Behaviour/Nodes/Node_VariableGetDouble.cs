@@ -13,17 +13,10 @@ using XNode; namespace FSMG
     public class Node_VariableGetDouble : NodeBase_VariableGet<double>
     {
 
-        public override GraphVarType GetGraphVarType()
-        {
-            return GraphVarType.Double;
-        }
+        [SerializeField, GraphVar(true, GraphVarType.Double)]
+        private string variableName = FSMGUtility.StringTag_Undefined;
 
-        public override List<string> GetVariableNames()
-        {
-            Graph_State graphState = (Graph_State)graph;
-
-            return graphState.GetVariablesName(GetGraphVarType(), LocalType);
-        }
+        public override string GetVariableName() { return variableName; }
         public override object GetValue(NodePort port)
         {
             return base.GetVariableValue();

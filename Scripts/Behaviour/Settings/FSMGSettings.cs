@@ -11,10 +11,17 @@ using System;
 
 namespace FSMG
 {
-    public class FSMGSettings : ScriptableObject
+
+    public class FSMGSettings : SingletonScriptableObject<FSMGSettings>
     {
+
         [SerializeField]
-        private TargetListGlobal targets = null;
+        private TagVarList systemVariables = null;
+        [SerializeField]
+        private TargetListPrivate systemTargets = null;
+
+        [SerializeField]
+        private TargetListPrivate targets = null;
         [SerializeField]
         private IntVarList intVars = null;
         [SerializeField]
@@ -62,6 +69,31 @@ namespace FSMG
                 return boolVars.GetVariableNames();
             }
         }
+        public List<string> VariableNames
+        {
+            get
+            {
+                List<string> list = new List<string>();
+                list.AddRange(intVars.GetVariableNames());
+                list.AddRange(floatVars.GetVariableNames());
+                list.AddRange(doubleVars.GetVariableNames());
+                list.AddRange(boolVars.GetVariableNames());
+                return list;
+            }
+        }
+        public TagVarList VariableTags
+        {
+            get
+            {
+                TagVarList list = new TagVarList();
+                list.AddRange(intVars.GetVariableTags());
+                list.AddRange(floatVars.GetVariableTags());
+                list.AddRange(doubleVars.GetVariableTags());
+                list.AddRange(boolVars.GetVariableTags());
+                return list;
+
+            }
+        }
 
         public bool TryGetIntVar(string variable, out IntVar intVar)
         {
@@ -71,7 +103,7 @@ namespace FSMG
         {
             return floatVars.TryGetValue(variable, out floatVar);
         }
-        public bool TryGetDoubeVar(string variable, out DoubleVar doubleVar)
+        public bool TryGetDoubleVar(string variable, out DoubleVar doubleVar)
         {
             return doubleVars.TryGetValue(variable, out doubleVar);
         }

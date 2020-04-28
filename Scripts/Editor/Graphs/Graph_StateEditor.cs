@@ -97,10 +97,7 @@ namespace FSMGEditor
                     case GraphObjectType.AIDecisionBase:
                         CreateCustomDecisionNode(unityObject);
                         break;
-                    case GraphObjectType.FSMTargetLocal:
-                        CreateGetTargetLocalNode(unityObject);
-                        break;
-                    case GraphObjectType.FSMTargetGlobal:
+                    case GraphObjectType.FSMTarget:
                         CreateGetTargetGlobalNode(unityObject);
                         break;
                     default:
@@ -137,29 +134,10 @@ namespace FSMGEditor
             Node_DecisionCustom decisionNode = (Node_DecisionCustom)node;
             decisionNode.SetAI_DecisionBase((AI_DecisionBase)go);
         }
-        private void CreateGetTargetLocalNode(UnityEngine.Object go)
-        {
-            GameObject gameObject = (GameObject)go;
-            FSMTargetLocal fsmt_local = gameObject.GetComponent<FSMTargetLocal>();
-
-            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
-            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
-            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
-            gridPos.x += randomPosx;
-            gridPos.y += randomPosy;
-
-            Node node = CreateNode(typeof(Node_TargetsGet), gridPos);
-            Node_TargetsGet getTarget = (Node_TargetsGet)node;
-
-            getTarget.SetTarget(fsmt_local.targetName, TargetLocalType.local);
-
-           
-
-        }
         private void CreateGetTargetGlobalNode(UnityEngine.Object go)
         {
             GameObject gameObject = (GameObject)go;
-            FSMTargetGlobal fsmt_global = gameObject.GetComponent<FSMTargetGlobal>();
+            FSMTarget fsmt_global = gameObject.GetComponent<FSMTarget>();
 
             float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
             float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
@@ -170,7 +148,7 @@ namespace FSMGEditor
             Node node = CreateNode(typeof(Node_TargetsGet), gridPos);
             Node_TargetsGet getTarget = (Node_TargetsGet)node;
 
-            getTarget.SetTarget(fsmt_global.targetName, TargetLocalType.global);
+            getTarget.SetTarget(fsmt_global.targetName, TargetComponentType.global);
 
 
 
@@ -178,96 +156,6 @@ namespace FSMGEditor
 
     }
 
-    [CustomEditor(typeof(Graph_State), true)]
-    public class GlobalGraphEditor : Editor
-    {
-        private bool show_newVarPanel = false;
-        private bool show_defaultErrorPanel = false;
-
-        private string new_varErrorMsg = "";
-        private string new_varName = FSMGUtility.StringTag_Undefined;
-        private GraphVarType new_varType = GraphVarType.Integer;
-
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-
-            if (GUILayout.Button("Edit graph"))
-            {
-                NodeEditorWindow.Open(serializedObject.targetObject as XNode.NodeGraph);
-            }
-
-            Draw_CreateVariablePanel();
-            DrawDefaultErrorPanel();
-
-            GUILayout.Space(EditorGUIUtility.singleLineHeight);
-            GUILayout.Label("Raw data", "BoldLabel");
-
-            DrawDefaultInspector();
-
-            serializedObject.ApplyModifiedProperties();
-        }
-        private void Draw_CreateVariablePanel()
-        {
-            Graph_State graph = (Graph_State)target;
-
-            if (graph == null) { show_newVarPanel = false; return; }
-
-
-            if (show_newVarPanel == false)
-            {
-                if (GUILayout.Button("Create New Variable")) { ClearNewVarProperties(true); }
-            }
-            else if (show_newVarPanel)
-            {
-                if (GUILayout.Button("Cancel")) { ClearNewVarProperties(); }
-
-
-                //Create Pannel
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-
-                //NewVar field name
-                new_varName = EditorGUILayout.TextField(new_varName);
-                //NewVar field type
-                new_varType = (GraphVarType)EditorGUILayout.EnumPopup(new_varType);
-                //Create newVariable at fsm componnent and reply the tag at graph
-                if (GUILayout.Button("Create"))
-                {
-                    GraphVarAddErrorsType error = graph.AddTagVariable(new_varName, new_varType);
-
-                    if (error != GraphVarAddErrorsType.none)
-                    {
-                        show_defaultErrorPanel = true;
-                        new_varErrorMsg = "Error: " + error.ToString();
-                    }
-
-                    new_varType = GraphVarType.Integer;
-                    new_varName = FSMGUtility.StringTag_Undefined;
-                    show_newVarPanel = false;
-                }
-
-                EditorGUILayout.EndHorizontal();
-            }
-        }
-        private void DrawDefaultErrorPanel()
-        {
-            if (show_defaultErrorPanel)
-            {
-                EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                EditorGUILayout.LabelField(new_varErrorMsg);
-                EditorGUILayout.EndHorizontal();
-            }
-        }
-        private void ClearNewVarProperties(bool openNewVarPanel = false)
-        {
-            show_defaultErrorPanel = false;
-            new_varErrorMsg = "";
-            new_varName = FSMGUtility.StringTag_Undefined;
-            new_varType = GraphVarType.Integer;
-            show_newVarPanel = openNewVarPanel;
-        }
-
-
-    }
+    
 
 }

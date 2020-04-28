@@ -8,40 +8,32 @@ using FSMG;
 using XNode; namespace FSMG
 {
     [Serializable]
-    public enum TargetType
+    public enum TargetLocalType
     {
-        Default = 0
+        Private = 0,
+        Public = 1
     }
 
     [Serializable]
-    public class TargetLocal
+    public class TargetComponent
     {
-        public TargetType targetType;
+        public TargetLocalType targetType;
         public FSMTargetBehaviour fsmTarget;
 
         public override string ToString()
-        {
-            
+        {            
             return targetType.ToString();
         }
-    }   
-
-
-    [Serializable]
-    public enum TargetLocalType
-    {
-        local,
-        global
     }
-
+   
     [Serializable]
-    public class TargetListGlobal : SerializableDictionaryBase<string, TargetType>
+    public class TargetListPrivate : SerializableDictionaryBase<string, TargetLocalType>
     {
 
     }
     
     [Serializable]
-    public class TargetListLocal : SerializableDictionaryBase<string, TargetLocal>
+    public class TargetListPublic : SerializableDictionaryBase<string, TargetComponent>
     {
 
     }

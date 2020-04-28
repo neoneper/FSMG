@@ -373,7 +373,6 @@ namespace FSMG
     public class BoolVarList : SerializableDictionaryBase<string, BoolVar>, ISDVariables<bool, BoolVar>
     {
         public void RemoveVariable(string varname) { this.Remove(varname); }
-
         public BoolVar SetOrCreatelValue(string varname, bool value)
         {
             BoolVar result = null;
@@ -448,6 +447,16 @@ namespace FSMG
     {
 
         public List<string> TagNames { get { return this.Keys.ToList(); } }
+        public void AddRange(TagVarList otherList)
+        {
+            if (otherList == null)
+                return;
+
+            foreach(string key in otherList.Keys)
+            {
+                this.Add(key, otherList[key]);
+            }
+        }
 
     }
 
@@ -468,7 +477,7 @@ namespace FSMG
     /// por um gráfico, que neste caso podemos considerar LOCAL, pois apenas componentes que utilizam este gráfico poderão ter
     /// acesso à esta variavel.
     /// </summary>
-    public enum GraphVarLocalType { Local, Global }
+    public enum GraphVarLocalType { Public, Private }
 
     /// <summary>
     /// Utilziado para informar qual o tipo de retorno alguma função teve na tentative de adicionar uma variavel a alguma lista.

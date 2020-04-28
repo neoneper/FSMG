@@ -7,10 +7,11 @@ using System.Linq;
 using Unity.Collections;
 using System;
 
-using XNode; namespace FSMG
+using XNode;
+namespace FSMG
 {
     [CreateAssetMenu(fileName = "New State Graph", menuName = "FSMG/Graphs/State Graph")]
-    [RequireNode(type:typeof(Node_StateRoot))]
+    [RequireNode(type: typeof(Node_StateRoot))]
     public class Graph_State : NodeGraph
     {
 
@@ -28,6 +29,15 @@ using XNode; namespace FSMG
         private NodeBase_State _currentState;
         //Nó raiz, primeiro nó a ser atualizado pelo FSM quando iniciado
         private NodeBase_State _rootState;
+
+        public Graph_State Instance
+        {
+            get
+            {
+                NodeGraph ncp = Copy();
+                return ncp as Graph_State;
+            }
+        }
         public FSMBehaviour LastFSMExecute { get { return last_fsm_executed; } }
         public float CurrentStateElapsedTime
         {
@@ -112,199 +122,15 @@ using XNode; namespace FSMG
             _rootState = state;
             return true;
         }
-        //=======================================================================================//
-        //VARIAVEIS CUSTOMIZADAS
-        //======================================================================================//
-
-        [SerializeField, SD_DrawKeyAsLabel(), SD_DrawOptions(false, true, true)]
-        private TagVarList variables = null;
-        [SerializeField]
-        private TargetListGlobal targets = null;
-
-
-        public void GetTagVariables(out TagVarList toList)
-        {
-            TagVarList tmp = new TagVarList();
-            tmp.CopyFrom(variables);
-            toList = tmp;
-        }
-        public bool TryGetIntVar(string varName, out IntVar intVar, GraphVarLocalType localType)
-        {
-            bool result = false;
-
-            switch (localType)
-            {
-                case GraphVarLocalType.Local:
-                    result = last_fsm_executed.TryGetIntValue(varName, out intVar);
-                    break;
-                case GraphVarLocalType.Global:
-                    result = settings.TryGetIntVar(varName, out intVar);
-                    break;
-                default:
-                    intVar = null;
-                    break;
-            }
-
-            return result;
-
-        }
-        public bool TryGetFloatVar(string varName, out FloatVar floatVar, GraphVarLocalType localType)
-        {
-            bool result = false;
-
-            switch (localType)
-            {
-                case GraphVarLocalType.Local:
-                    result = last_fsm_executed.TryGetFloatValue(varName, out floatVar);
-                    break;
-                case GraphVarLocalType.Global:
-                    result = settings.TryGetFloatVar(varName, out floatVar);
-                    break;
-                default:
-                    floatVar = null;
-                    break;
-            }
-
-            return result;
-        }
-        public bool TryGetDoubeVar(string varName, out DoubleVar doubleVar, GraphVarLocalType localType)
-        {
-            bool result = false;
-
-            switch (localType)
-            {
-                case GraphVarLocalType.Local:
-                    result = last_fsm_executed.TryGetDoubeValue(varName, out doubleVar);
-                    break;
-                case GraphVarLocalType.Global:
-                    result = settings.TryGetDoubeVar(varName, out doubleVar);
-                    break;
-                default:
-                    doubleVar = null;
-                    break;
-            }
-
-            return result;
-        }
-        public bool TryGetBoolVar(string varName, out BoolVar boolVar, GraphVarLocalType localType)
-        {
-            bool result = false;
-
-            switch (localType)
-            {
-                case GraphVarLocalType.Local:
-                    result = last_fsm_executed.TryGetBooleanValue(varName, out boolVar);
-                    break;
-                case GraphVarLocalType.Global:
-                    result = settings.TryGetBoolVar(varName, out boolVar);
-                    break;
-                default:
-                    boolVar = null;
-                    break;
-            }
-
-            return result;
-        }
-        public bool TryGetTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType localType)
-        {
-            return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTargets, localType);
-        }
-
-        public List<string> GetGlobalVariablesName(GraphVarType vartype)
-        {
-            List<string> variablesName = null;
-            switch (vartype)
-            {
-                case GraphVarType.Integer:
-                    variablesName = settings.Int_VariableNames.ToList();
-                    break;
-                case GraphVarType.Float:
-                    variablesName = settings.Float_VariableNames.ToList();
-                    break;
-                case GraphVarType.Double:
-                    variablesName = settings.Double_VariableNames.ToList();
-                    break;
-                case GraphVarType.Boolean:
-                    variablesName = settings.Bool_VariableNames.ToList();
-                    break;
-            }
-
-            return variablesName;
-        }
-        public List<string> GetLocalVariablesName(GraphVarType vartype)
-        {
-            TagVarList taglist;
-            GetTagVariables(out taglist);
-
-            List<string> variablesName = new List<string>();
-
-            if (taglist.Count > 0)
-            {
-                foreach (string varname in taglist.Keys)
-                {
-                    if (taglist[varname] == vartype)
-                        variablesName.Add(varname);
-                }
-            }
-
-            taglist.Clear();
-            taglist = null;
-
-            return variablesName;
-        }
-        public List<string> GetGlobalTargetsName()
-        {
-            return settings.TargetNames.ToList();
-        }
-        public List<string> GetLocalTargetsName()
-        {
-            return targets.Keys.ToList();
-        }
-
-        public List<string> GetVariablesName(GraphVarType vartype, GraphVarLocalType localType)
-        {
-            if (localType == GraphVarLocalType.Global)
-                return GetGlobalVariablesName(vartype);
-            else
-                return GetLocalVariablesName(vartype);
-
-        }
-        public List<string> GetTargetsName(TargetLocalType localType)
-        {
-            if (localType == TargetLocalType.global)
-                return GetGlobalTargetsName();
-            else
-                return GetLocalTargetsName();
-
-        }
-
         public void SetSettings(FSMGSettings settings)
         {
             this.settings = settings;
         }
-        public GraphVarAddErrorsType AddTagVariable(string varName, GraphVarType varType)
-        {
-            GraphVarAddErrorsType result = GraphVarAddErrorsType.none;
 
-            if (varName == FSMGUtility.StringTag_Undefined)
-                return GraphVarAddErrorsType.invalidName;
-
-            if (variables.ContainsKey(varName) == true)
-            {
-                result = GraphVarAddErrorsType.graph_already_exists;
-            }
-            else
-            {
-                variables.Add(varName, varType);
-            }
-
-            return result;
-        }
-        
         public override NodeGraph Copy()
         {
             Graph_State cp = (Graph_State)base.Copy();
-            
+
             int indexOfRoot = nodes.IndexOf(RootState);
             int indexOfCurrent = nodes.IndexOf(CurrentState);
 
@@ -315,7 +141,7 @@ using XNode; namespace FSMG
 
             //Troca a referencia dos estados que são referencia nos nós de JUMP STATE.
             List<Node> jumps = cp.nodes.FindAll(r => r is Node_StateJump);
-            foreach(Node j in jumps)
+            foreach (Node j in jumps)
             {
                 Node_StateJump nj = (Node_StateJump)j;
                 nj.goToState = (NodeBase_State)cp.nodes[nodes.IndexOf(nj.goToState)];
@@ -341,22 +167,72 @@ using XNode; namespace FSMG
 
             return base.AddNode(type);
         }
-
         public override void RemoveNode(Node node)
         {
             base.RemoveNode(node);
         }
 
-        
-
-        public Graph_State Instance
-        {
-            get
-            {
-                NodeGraph ncp = Copy();
-                return ncp as Graph_State;
-            }
+        //================================================================================//
+        //FSM VARIABLES
+        //================================================================================//
+        public bool TryGetIntVar(string varName, out IntVar intVar, GraphVarLocalType localType)
+        {          
+            return settings.TryGetIntVar(varName, out intVar);
         }
+        public bool TryGetFloatVar(string varName, out FloatVar floatVar, GraphVarLocalType localType)
+        {
+            return settings.TryGetFloatVar(varName, out floatVar);
+        }
+        public bool TryGetDoubeVar(string varName, out DoubleVar doubleVar, GraphVarLocalType localType)
+        {
+            return settings.TryGetDoubleVar(varName, out doubleVar);
+        }
+        public bool TryGetBoolVar(string varName, out BoolVar boolVar, GraphVarLocalType localType)
+        {
+            return settings.TryGetBoolVar(varName, out boolVar);
+        }
+        public bool TryGetTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType tType)
+        {
+            return last_fsm_executed.TryGetFSMTarget(targetName, out fsmTargets, tType);
+        }
+        public TagVarList GetVariableTags(GraphVarLocalType localType)
+        {
+            return settings.VariableTags;
+        }
+        public List<string> GetVariableNames(GraphVarType vartype, GraphVarLocalType localType)
+        {
+            List<string> variablesName = null;
+            switch (vartype)
+            {
+                case GraphVarType.Integer:
+
+                    variablesName = settings.Int_VariableNames.ToList();
+
+                    break;
+                case GraphVarType.Float:
+
+                    variablesName = settings.Float_VariableNames.ToList();
+
+                    break;
+                case GraphVarType.Double:
+
+                    variablesName = settings.Double_VariableNames.ToList();
+
+                    break;
+                case GraphVarType.Boolean:
+
+                    variablesName = settings.Bool_VariableNames.ToList();
+
+                    break;
+            }
+
+            return variablesName;
+        }
+        public List<string> GetTargetNames()
+        {
+            return settings.TargetNames.ToList();
+        }
+
 
     }
 

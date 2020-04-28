@@ -71,21 +71,36 @@ namespace FSMGEditor
 
             object target = PropertyUtility.GetTargetObjectWithProperty(property);
 
-            object valuesObject = GetValues(property, attr.ValuesName);
             menu.AddItem(new GUIContent(FSMTargetBehaviour.UndefinedTag), false, () => SelectMatInfo(property, FSMTargetBehaviour.UndefinedTag, target));
 
+            List<string> valuesList = new List<string>();
 
-
-            if (valuesObject is IList)
+            switch(attr.VarType)
             {
-                IList valuesList = (IList)valuesObject;
-
-                for (int i = 0; i < valuesList.Count; i++)
-                {
-                    GUIContent content = new GUIContent(valuesList[i].ToString());
-                    menu.AddItem(content, valuesList[i].ToString() == property.stringValue, () => SelectMatInfo(property, content.text, target));
-                }
+                case GraphVarType.Boolean:
+                    valuesList.AddRange(FSMGSettingsPreferences.GetOrCreateSettings().Bool_VariableNames);
+                    break;
+                case GraphVarType.Double:
+                    valuesList.AddRange(FSMGSettingsPreferences.GetOrCreateSettings().Double_VariableNames);
+                    break;
+                case GraphVarType.Float:
+                    valuesList.AddRange(FSMGSettingsPreferences.GetOrCreateSettings().Float_VariableNames);
+                    break;
+                case GraphVarType.Integer:
+                    valuesList.AddRange(FSMGSettingsPreferences.GetOrCreateSettings().Int_VariableNames);
+                    break;
+                case GraphVarType.Unknown:
+                    valuesList.AddRange(FSMGSettingsPreferences.GetOrCreateSettings().VariableNames);
+                    break;
             }
+
+
+            for (int i = 0; i < valuesList.Count; i++)
+            {
+                GUIContent content = new GUIContent(valuesList[i].ToString());
+                menu.AddItem(content, valuesList[i].ToString() == property.stringValue, () => SelectMatInfo(property, content.text, target));
+            }
+
 
             menu.ShowAsContext();
         }

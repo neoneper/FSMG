@@ -18,7 +18,7 @@ namespace FSMG.Components
         [SerializeField, GraphState(callback: "OnGraphChangedInEditor")]
         private Graph_State _graph = null;
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
-        private TargetListLocal targets = null;
+        private TargetListPublic targets = null;
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private IntVarList intVars = null;
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
@@ -27,6 +27,7 @@ namespace FSMG.Components
         private DoubleVarList doubleVars = null;
         [SerializeField, SD_DrawOptions(false, false), SD_DrawKeyAsLabel]
         private BoolVarList boolVars = null;
+
         private bool readyToWork = false;
 
         /// <summary>
@@ -97,107 +98,7 @@ namespace FSMG.Components
         {
             return boolVars.TryGetValue(variable, out boolVar);
         }
-        /// <summary>
-        /// Adiciona uma variavel ao gráfico caso éla ainda não exista.
-        /// Tenha em mente que esta variavel sera adicionada ao gráfico ao qual este componente pertence,
-        /// isto significa que todos os FSM que utilizem este mesmo gráfico também terão sua própria versão 
-        /// desta variavel. Caso você remova utizando <seealso cref="RemoveVariable(string, GraphVarType)"/>
-        /// todos os componentes <seealso cref="FSMBehaviour"/> ficarão sem ela.
-        /// </summary>
-        /// <param name="varName">Nome da variavel</param>
-        /// <param name="varType">Tipo da variavel</param>
-        /// <returns><see cref="GraphVarAddErrorsType.none"/> caso seja armazenada com sucesso. </returns>
-        public GraphVarAddErrorsType AddVariable(string varName, GraphVarType varType)
-        {
-            GraphVarAddErrorsType result = GraphVarAddErrorsType.none;
 
-            if (varName == FSMGUtility.StringTag_Undefined)
-            {
-                result = GraphVarAddErrorsType.invalidName;
-                return result;
-            }
-
-            //Primeiro verifico se a variavel ja nao esta presente no COmponente.
-            if (CheckIfVarExist(varName))
-            {
-                result = GraphVarAddErrorsType.fsm_already_exists;
-                return result;
-            }
-
-            //Depois verifico se a variavel já esta marcada nó gráfico
-            result = graph.AddTagVariable(varName, varType);
-
-            if (result != GraphVarAddErrorsType.none) return result;
-
-
-            switch (varType)
-            {
-                case GraphVarType.Boolean:
-                    boolVars.Add(varName, new BoolVar());
-                    break;
-
-                case GraphVarType.Double:
-                    doubleVars.Add(varName, new DoubleVar());
-                    break;
-
-                case GraphVarType.Float:
-                    floatVars.Add(varName, new FloatVar());
-                    break;
-                case GraphVarType.Integer:
-                    intVars.Add(varName, new IntVar());
-                    break;
-            }
-
-            return result;
-        }
-        /// <summary>
-        /// Remove variavel do gráfico.
-        /// Tenha em mente que todos os <see cref="FSMBehaviour"/> que utilizam este gráfico também ficarão
-        /// sem esta variável.
-        /// </summary>
-        /// <param name="varName">Nome da variavel</param>
-        /// <param name="varType">Tipo da variavel</param>
-        public void RemoveVariable(string varName, GraphVarType varType)
-        {
-            switch (varType)
-            {
-                case GraphVarType.Boolean:
-                    boolVars.Remove(varName);
-                    break;
-
-                case GraphVarType.Double:
-                    doubleVars.Remove(varName);
-                    break;
-
-                case GraphVarType.Float:
-                    floatVars.Remove(varName);
-                    break;
-                case GraphVarType.Integer:
-                    intVars.Remove(varName);
-                    break;
-            }
-
-        }
-        /// <summary>
-        /// Verifica se a variavel existe no gráfico.
-        /// </summary>
-        /// <param name="varName">Nome da variavel a ser pesquiasda</param>
-        /// <returns>falso se não encontrada, verdadeiro se encontrado</returns>       
-        public bool CheckIfVarExist(string varName)
-        {
-            bool result = false;
-
-            if (intVars.ContainsKey(varName))
-            { result = true; }
-            else if (floatVars.ContainsKey(varName))
-            { result = true; }
-            else if (doubleVars.ContainsKey(varName))
-            { result = true; }
-            else if (boolVars.ContainsKey(varName))
-            { result = true; }
-
-            return result;
-        }
         /// <summary>
         /// Dicionário de lista reordenável contendo todas as variaveis do gráfico criadas ate o momento em formato
         /// <seealso cref="TagVar"/>
@@ -206,14 +107,11 @@ namespace FSMG.Components
         public TagVarList GetVariablesAsTag()
         {
             TagVarList tagVariables = new TagVarList();
-            foreach (string intKey in intVars.Keys)
-                tagVariables.Add(intKey, GraphVarType.Integer);
-            foreach (string floatKey in floatVars.Keys)
-                tagVariables.Add(floatKey, GraphVarType.Float);
-            foreach (string doubleKey in doubleVars.Keys)
-                tagVariables.Add(doubleKey, GraphVarType.Double);
-            foreach (string boolKey in boolVars.Keys)
-                tagVariables.Add(boolKey, GraphVarType.Boolean);
+
+            tagVariables.AddRange(intVars.GetVariableTags());
+            tagVariables.AddRange(floatVars.GetVariableTags());
+            tagVariables.AddRange(doubleVars.GetVariableTags());
+            tagVariables.AddRange(boolVars.GetVariableTags());
 
             return tagVariables;
 
@@ -223,19 +121,19 @@ namespace FSMG.Components
         /// </summary>
         /// <param name="targetName">Nome dos trajetos a serem procurados</param>
         /// <param name="fsmTarget">lista que recebe os resultados</param>
-        /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
-        /// ou se é global <see cref="FSMTargetGlobal"/>
+        /// <param name="tType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
+        /// ou se é global <see cref="FSMTarget"/>
         /// </param>
         /// <returns>Verdadeiro se encontrado</returns>
-        public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType localType)
+        public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType tType)
         {
 
-            switch (localType)
+            switch (tType)
             {
-                case TargetLocalType.global:
+                case TargetLocalType.Private:
                     FSManager.Instance.TryGetFSMTarget(targetName, out fsmTargets);
                     break;
-                case TargetLocalType.local:
+                case TargetLocalType.Public:
                     fsmTargets = targets.Where(pair => pair.Key == targetName).Select(pair => pair.Value.fsmTarget).ToList();
                     break;
                 default:
@@ -247,7 +145,6 @@ namespace FSMG.Components
             return fsmTargets.Count > 0;
         }
 
-
         /// <summary>
         /// Sincroniza as variaveis e trajetos do componente com as variaveis do gráfico de estados
         /// </summary>
@@ -258,29 +155,28 @@ namespace FSMG.Components
             if (graph == null)
                 return;
 
-            TagVarList graphVariables = null;
-
-            TagVarList myTagVariables = GetVariablesAsTag();
-
-            _graph.GetTagVariables(out graphVariables);
+            //Settings Variables
+            TagVarList globalTags = FSMGSettings.Instance.VariableTags;
+            //Componnent Variables
+            TagVarList localTags = GetVariablesAsTag();
 
             //Remove variaveis que estejam somente no componente mas que nao estejam no grafico
-            foreach (string variable in myTagVariables.Keys)
+            foreach (string variable in localTags.Keys)
             {
-                if (graphVariables.ContainsKey(variable) == false)
+                if (globalTags.ContainsKey(variable) == false)
                 {
-                    RemoveVariable(variable, myTagVariables[variable]);
+                    RemoveVariable(variable, localTags[variable]);
                 }
 
             }
 
-            myTagVariables.Clear();
-            myTagVariables = null;
+            localTags.Clear();
+            localTags = null;
 
             //Adiciona variaveis marcadas no grafico que não existam no FSM
-            foreach (string variable in graphVariables.Keys)
+            foreach (string variable in globalTags.Keys)
             {
-                GraphVarType varType = graphVariables[variable];
+                GraphVarType varType = globalTags[variable];
 
                 switch (varType)
                 {
@@ -303,8 +199,8 @@ namespace FSMG.Components
                 }
             }
 
-            graphVariables.Clear();
-            graphVariables = null;
+            globalTags.Clear();
+            globalTags = null;
 
         }
         public bool CheckIfCountDownElapsed(float duration)
@@ -345,37 +241,57 @@ namespace FSMG.Components
             boolVars.Clear();
             targets.Clear();
         }
+
+        private void RemoveVariable(string varname, GraphVarType varType)
+        {
+            switch (varType)
+            {
+                case GraphVarType.Boolean:
+                    boolVars.Remove(varname);
+                    break;
+                case GraphVarType.Double:
+                    doubleVars.Remove(varname);
+                    break;
+                case GraphVarType.Float:
+                    floatVars.Remove(varname);
+                    break;
+                case GraphVarType.Integer:
+                    intVars.Remove(varname);
+                    break;
+
+            }
+        }
         private void SyncTargets()
         {
             if (graph == null)
                 return;
 
-            List<string> graphTargets = graph.GetTargetsName(TargetLocalType.local);
+            List<string> globalTargets = FSMGSettings.Instance.TargetNames;
             List<string> localtargets = targets.Keys.ToList();
 
             //Remove variaveis que estejam somente no componente mas que nao estejam no grafico
             foreach (string gt in localtargets)
             {
-                if (graphTargets.Contains(gt) == false)
-                {
-                    targets.Remove(gt);
-                }
-            }
-            localtargets.Clear();
-            localtargets = null;
+                if (!globalTargets.Contains(gt)) { targets.Remove(gt); }
+            }           
 
             //Adiciona variaveis marcadas no grafico que não existam no FSM
-            foreach (string gt in graphTargets)
+            foreach (string gt in globalTargets)
             {
                 if (targets.ContainsKey(gt) == false)
                 {
-                    targets.Add(gt, new TargetLocal());
+                    targets.Add(gt, new TargetComponent());
                 }
             }
 
-            graphTargets.Clear();
-            graphTargets = null;
+            //Clear Garbage
+            globalTargets.Clear();
+            globalTargets = null;
+            localtargets.Clear();
+            localtargets = null;
         }
+
+      
 
     }
 }
