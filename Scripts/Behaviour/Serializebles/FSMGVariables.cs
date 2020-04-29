@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FSMG;
+using UnityEngine;
 
 namespace FSMG
 {
@@ -24,15 +25,43 @@ namespace FSMG
             return varType;
         }
     }
+
+    [Serializable]
+    public abstract class VarBase
+    {
+        public abstract void SetVale<T>(T value) where T : IComparable;
+    }
+
+
     /// <summary>
     /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="int"/>.
     /// </summary>
     [Serializable]
-    public class IntVar : IVariable<int>
+    public class IntVar : VarBase
     {
         public int min = int.MinValue;
         public int max = int.MaxValue;
         public int value = 0;
+
+        public override void SetVale<T>(T value)
+        {
+            int result = 0;
+            switch (value.GetType().ToGraphType())
+            {
+                case GraphVarType.Boolean:
+                    result = Convert.ToBoolean(value) == true ? 1 : 0;
+                    break;
+                case GraphVarType.Double:
+                case GraphVarType.Float:
+                    result = Mathf.RoundToInt((float)Convert.ToDouble(value));
+                    break;
+                case GraphVarType.Integer:
+                    result = Convert.ToInt32(value);
+                    break;
+            }
+
+            SetVale(result);
+        }
 
         public void SetValue(int val)
         {
@@ -54,12 +83,29 @@ namespace FSMG
     /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="float"/>
     /// </summary>
     [Serializable]
-    public class FloatVar : IVariable<float>
+    public class FloatVar : VarBase
     {
         public float min = float.MinValue;
         public float max = float.MaxValue;
         public float value = 0;
 
+        public override void SetVale<T>(T value)
+        {
+            float result = 0;
+            switch (value.GetType().ToGraphType())
+            {
+                case GraphVarType.Boolean:
+                    result = Convert.ToBoolean(value) == true ? 1.0f : 0;
+                    break;
+                case GraphVarType.Double:
+                case GraphVarType.Float:
+                case GraphVarType.Integer:
+                    result = (float)Convert.ToDouble(value);
+                    break;
+            }
+
+            SetVale(result);
+        }
         public void SetValue(float val)
         {
             if (val < min)
@@ -70,8 +116,6 @@ namespace FSMG
                 value = val;
 
         }
-
-
         public override string ToString()
         {
             return value.ToString();
@@ -81,12 +125,29 @@ namespace FSMG
     /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="double"/>
     /// </summary>
     [Serializable]
-    public class DoubleVar : IVariable<double>
+    public class DoubleVar : VarBase
     {
         public double min = float.MinValue;
         public double max = float.MaxValue;
         public double value = 0;
 
+        public override void SetVale<T>(T value)
+        {
+            double result = 0;
+            switch (value.GetType().ToGraphType())
+            {
+                case GraphVarType.Boolean:
+                    result = Convert.ToBoolean(value) == true ? 1.0f : 0;
+                    break;
+                case GraphVarType.Double:
+                case GraphVarType.Float:
+                case GraphVarType.Integer:
+                    result = Convert.ToDouble(value);
+                    break;
+            }
+
+            SetVale(result);
+        }
         public void SetValue(double val)
         {
             if (val < min)
@@ -106,10 +167,27 @@ namespace FSMG
     /// Utilizado pelos gráfico de estados e também pelos controladores FSM para armazenar valores <see cref="bool"/>
     /// </summary>
     [Serializable]
-    public class BoolVar : IVariable<bool>
+    public class BoolVar : VarBase, IVariable<bool>
     {
         public bool value = false;
 
+        public override void SetVale<T>(T value)
+        {
+            bool result = false;
+            switch (value.GetType().ToGraphType())
+            {
+                case GraphVarType.Boolean:
+                    result = Convert.ToBoolean(value);
+                    break;
+                case GraphVarType.Double:
+                case GraphVarType.Float:
+                case GraphVarType.Integer:
+                    result = Convert.ToInt16(value) > 0 ? true : false;
+                    break;
+            }
+
+            SetVale(result);
+        }
         public void SetValue(bool val)
         {
             value = val;
@@ -452,7 +530,7 @@ namespace FSMG
             if (otherList == null)
                 return;
 
-            foreach(string key in otherList.Keys)
+            foreach (string key in otherList.Keys)
             {
                 this.Add(key, otherList[key]);
             }

@@ -70,7 +70,8 @@ namespace FSMGEditor
                 //Create newVariable at fsm componnent and reply the tag at graph
                 if (GUILayout.Button("Create"))
                 {
-                    GraphVarAddErrorsType error = fsmBehaviour.AddVariable(new_varName, new_varType);
+                    bool r = fsmBehaviour.Variables.AddVariable(new_varName, new_varType);
+                    GraphVarAddErrorsType error = r == true ? GraphVarAddErrorsType.none : GraphVarAddErrorsType.fsm_already_exists;
 
                     if (error != GraphVarAddErrorsType.none)
                     {
