@@ -24,12 +24,12 @@ namespace FSMG.Components
 
         //Lista de trajetos globais já instanciados no mundo.
         //ésta lista será populada somente uma vez, quando requisitado pelo seu metodo publico GET,
-        private List<FSMTargetGlobal> _globalTargets = null;
+        private List<FSMTarget> _globalTargets = null;
 
         /// <summary>
         /// Uma Lista de trajetos globais já instanciados no mundo.
         /// </summary>
-        public List<FSMTargetGlobal> globalTargets
+        public List<FSMTarget> globalTargets
         {
             get
             {
@@ -37,11 +37,11 @@ namespace FSMG.Components
                 //Tendo em mente que a cena não tera modificações na quantidade de trajetos em runtime.
                 if (_globalTargets == null)
                 {
-                    _globalTargets = FindObjectsOfType<FSMTargetGlobal>().ToList();
+                    _globalTargets = FindObjectsOfType<FSMTarget>().ToList();
                     _globalTargets.RemoveAll(r => r.targetName == FSMGUtility.StringTag_Undefined);
                 }
 
-                return new List<FSMTargetGlobal>(_globalTargets);
+                return new List<FSMTarget>(_globalTargets);
 
             }
         }
@@ -52,7 +52,7 @@ namespace FSMG.Components
         /// <param name="targetName">Nome do trajeto a ser procurado</param>
         /// <param name="fsmTarget">variavel para alocação, se encontrado</param>
         /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
-        /// ou se é global <see cref="FSMTargetGlobal"/>
+        /// ou se é global <see cref="FSMTarget"/>
         /// </param>
         /// <returns>Verdadeiro se encontrado</returns>
         public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> targetsGlobal)

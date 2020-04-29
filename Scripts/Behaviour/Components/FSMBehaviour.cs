@@ -224,7 +224,7 @@ namespace FSMG.Components
         /// <param name="targetName">Nome dos trajetos a serem procurados</param>
         /// <param name="fsmTarget">lista que recebe os resultados</param>
         /// <param name="localType">Informa ao sistema de busca se o trajeto é local <seealso cref="FSMTargetLocal"/>
-        /// ou se é global <see cref="FSMTargetGlobal"/>
+        /// ou se é global <see cref="FSMTarget"/>
         /// </param>
         /// <returns>Verdadeiro se encontrado</returns>
         public bool TryGetFSMTarget(string targetName, out List<FSMTargetBehaviour> fsmTargets, TargetLocalType localType)

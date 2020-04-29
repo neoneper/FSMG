@@ -12,11 +12,6 @@ namespace FSMG
     {
 
         [SerializeField]
-        private TagVarList systemVariables = null;
-        [SerializeField]
-        private TargetListGlobal systemTargets = null;
-
-        [SerializeField]
         private TargetListGlobal targets = null;
         [SerializeField]
         private IntVarList intVars = null;

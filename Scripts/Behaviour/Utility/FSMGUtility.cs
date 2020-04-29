@@ -13,7 +13,6 @@ namespace FSMG
         None,
         AIActionBase,
         AIDecisionBase,
-        FSMTargetLocal,
         FSMTargetGlobal
     }
     public class FSMGUtility
@@ -203,12 +202,9 @@ namespace FSMG
                 return GraphObjectType.AIDecisionBase;
             else if (unityObject is GameObject)
             {
-                FSMTargetLocal clocal = ((GameObject)unityObject).GetComponent<FSMTargetLocal>();
-                FSMTargetGlobal cglobal = ((GameObject)unityObject).GetComponent<FSMTargetGlobal>();
+                FSMTarget cglobal = ((GameObject)unityObject).GetComponent<FSMTarget>();
 
-                if (clocal != null)
-                    return GraphObjectType.FSMTargetLocal;
-                else if (cglobal != null)
+                if (cglobal != null)
                     return GraphObjectType.FSMTargetGlobal;
                 else return GraphObjectType.None;
             }

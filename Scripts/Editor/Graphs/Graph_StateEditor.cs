@@ -85,10 +85,7 @@ namespace FSMGEditor
                         break;
                     case GraphObjectType.AIDecisionBase:
                         CreateCustomDecisionNode(unityObject);
-                        break;
-                    case GraphObjectType.FSMTargetLocal:
-                        CreateGetTargetLocalNode(unityObject);
-                        break;
+                        break;                   
                     case GraphObjectType.FSMTargetGlobal:
                         CreateGetTargetGlobalNode(unityObject);
                         break;
@@ -126,29 +123,11 @@ namespace FSMGEditor
             Node_DecisionCustom decisionNode = (Node_DecisionCustom)node;
             decisionNode.SetAI_DecisionBase((AI_DecisionBase)go);
         }
-        private void CreateGetTargetLocalNode(UnityEngine.Object go)
-        {
-            GameObject gameObject = (GameObject)go;
-            FSMTargetLocal fsmt_local = gameObject.GetComponent<FSMTargetLocal>();
-
-            float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
-            float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);
-            Vector2 gridPos = window.WindowToGridPosition(Event.current.mousePosition);
-            gridPos.x += randomPosx;
-            gridPos.y += randomPosy;
-
-            Node node = CreateNode(typeof(Node_TargetsGet), gridPos);
-            Node_TargetsGet getTarget = (Node_TargetsGet)node;
-
-            getTarget.SetTarget(fsmt_local.targetName, TargetLocalType.local);
-
-           
-
-        }
+       
         private void CreateGetTargetGlobalNode(UnityEngine.Object go)
         {
             GameObject gameObject = (GameObject)go;
-            FSMTargetGlobal fsmt_global = gameObject.GetComponent<FSMTargetGlobal>();
+            FSMTarget fsmt_global = gameObject.GetComponent<FSMTarget>();
 
             float randomPosx = UnityEngine.Random.Range(-50.0f, 50.0f);
             float randomPosy = UnityEngine.Random.Range(-50.0f, 50.0f);

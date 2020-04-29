@@ -4,8 +4,8 @@ using UnityEngine;
 
 using XNode; namespace FSMG.Components
 {
-    [AddComponentMenu("FSM/TargetGlobal")]
-    public class FSMTargetGlobal : FSMTargetBehaviour
+    [AddComponentMenu("FSM/Target")]
+    public class FSMTarget : FSMTargetBehaviour
     {
         [SerializeField, FSMTargets]
         private string target = UndefinedTag;
